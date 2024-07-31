@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  	"start": "node dist/setup.js",
-	"build": "tsc"
+    "dev": "node dist/setup.js",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "htmx": "^0.0.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
