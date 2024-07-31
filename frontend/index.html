@@ -1,35 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Setup Dashboard</title>
-    <link rel="stylesheet" href="./styles.css">
-      <script src="https://unpkg.com/htmx.org@2.0.1"></script>
-</head>
-<body>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+  </head>
+  <body>
     <div class="dashboard">
-        <header class="dashboard-header">
-            <h1>Project Setup Dashboard</h1>
-        </header>
-        <main class="dashboard-content">
-            <form id="project-setup-form">
-                <div class="form-group">
-                    <label for="projectName">Select Repository:</label>
-                    <input type="text" id="projectName" name="projectName" placeholder="Enter repository URL">
-                </div>
-                <div class="form-group">
-                    <label for="repoLink">Build Command:</label>
-                    <input type="text" id="repoLink" name="repoLink" placeholder="Enter build command">
-                </div>
-                <div class="form-group">
-                    <label for="entryPoint">Entry Point:</label>
-                    <input type="text" id="entryPoint" name="entryPoint" placeholder="Enter entry point">
-                </div>
-                <button type="submit" hx-post="/htmx/" hx-swap="innerHTML">Save Configuration</button>
-            </form>
-        </main>
+      <header class="dashboard-header">
+        <h1>Project Setup Dashboard</h1>
+      </header>
+      <main class="dashboard-content">
+        <form id="project-setup-form">
+          <div class="form-group">
+            <label for="projectName">Select Repository:</label>
+            <input
+              type="text"
+              id="projectName"
+              name="projectName"
+              placeholder="Enter repository URL"
+            />
+          </div>
+          <div class="form-group">
+            <label for="repoLink">Build Command:</label>
+            <input
+              type="text"
+              id="repoLink"
+              name="repoLink"
+              placeholder="Enter build command"
+            />
+          </div>
+          <div class="form-group">
+            <label for="entryPoint">Entry Point:</label>
+            <input
+              type="text"
+              id="entryPoint"
+              name="entryPoint"
+              placeholder="Enter entry point"
+            />
+          </div>
+          <button type="submit" hx-post="/htmx/" hx-swap="innerHTML">
+            Save Configuration
+          </button>
+        </form>
+      </main>
     </div>
-</body>
+  </body>
 </html>
-
