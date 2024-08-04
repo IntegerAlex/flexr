@@ -56,6 +56,9 @@ const config = {
   baseURL: process.env.BASEURL,
   clientID: process.env.CLIENTID,
   issuerBaseURL: process.env.ISSUERBASEURL,
+  authorizationParams: {
+	  scope: 'openid profile',
+  },
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -64,7 +67,8 @@ app.use(auth(config));
 app.get('/', (req, res) => {
     console.log('Accessing root route');
     if (req.oidc.isAuthenticated()) {
-	    res.redirect('/callback');
+	    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+	    //res.send(req.oidc.isAuthenticated());
     } else {
         console.log('User is not authenticated, redirecting to /login');
         res.redirect('/home');
@@ -78,8 +82,8 @@ app.get('/home', (req, res) => {
 
 // Index route
 app.get('/callback', (req, res) => {
-    console.log('User accessed /index'+req.query);
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  //  console.log('User accessed /index'+req.query);
+	res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // Profile route, protected by authentication
