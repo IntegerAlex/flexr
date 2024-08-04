@@ -66,8 +66,13 @@ app.get('/', (req, res) => {
     if (req.oidc.isAuthenticated()) {
     } else {
         console.log('User is not authenticated, redirecting to /login');
-        res.redirect('/login');
+        res.redirect('/home');
     }
+});
+
+app.get('/home', (req, res) => {
+    console.log('User accessed /home');
+    res.sendFile(path.join(__dirname, '../frontend/home.html'));
 });
 
 // Index route
