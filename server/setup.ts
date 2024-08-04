@@ -64,6 +64,7 @@ app.use(auth(config));
 app.get('/', (req, res) => {
     console.log('Accessing root route');
     if (req.oidc.isAuthenticated()) {
+	    res.redirect('/callback');
     } else {
         console.log('User is not authenticated, redirecting to /login');
         res.redirect('/home');
