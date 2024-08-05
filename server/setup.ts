@@ -19,7 +19,7 @@ app.use("/htmx",htmxRouter)
 //	res.sendFile(path.join(__dirname, '../frontend/index.html'));
 //
 //});
-
+app.use(express.static(path.join(__dirname, '../frontend/')));
 app.get('/v1/health', (req, res) => {
 	 
 	});
@@ -60,6 +60,7 @@ const config = {
 	  scope: 'openid profile',
   },
 };
+app.use(express.static(path.join(__dirname+'../frontend/')));
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
@@ -91,6 +92,26 @@ app.get('/profile', requiresAuth(), (req, res) => {
     console.log('User accessed /profile');
     res.send(JSON.stringify(req.oidc.user));
 });
+app.get('/v1/repositories', (req, res) => {
+	// get all repositories
+	const user_id = req.query.user_id;
+        fetch(`https://api.github.com/${user_id}/repos`, {
+		method: 'GET'})
+	.then((response) => response.json())
+	.then((data) => {
+		const repositories = data.map((repo: any) => {
+			return {
+				name: repo.name,
+				url: repo.html_url,	
+			}	})
+		res.send(repositories);
+	})
+});
+
+
+
 app.listen(8080, () => {
 	console.log('Server is running on port 8080');
 }	);
+
+
