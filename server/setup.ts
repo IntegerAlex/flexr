@@ -95,10 +95,12 @@ app.get('/profile', requiresAuth(), (req, res) => {
 app.get('/v1/repositories', (req, res) => {
 	// get all repositories
 	const user_id = req.query.user_id;
-        fetch(`https://api.github.com/${user_id}/repos`, {
+        fetch(`https://api.github.com/users/${user_id}/repos`, {
 		method: 'GET'})
-	.then((response) => response.json())
+	.then((response) => response.json()
+	     )
 	.then((data) => {
+		console.log(data);
 		const repositories = data.map((repo: any) => {
 			return {
 				name: repo.name,
