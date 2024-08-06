@@ -1,80 +1,147 @@
-/* General Styles */
+/* Root color variables */
+:root {
+  --background: hsl(210, 100%, 97%);
+  --foreground: hsl(339, 20%, 20%);
+  --primary: hsl(308, 56%, 85%);
+  --primary-foreground: hsl(210, 22%, 22%);
+  --secondary: hsl(196, 75%, 88%);
+  --secondary-foreground: hsl(210, 22%, 22%);
+  --accent: hsl(211, 86%, 70%);
+  --accent-foreground: hsl(210, 22%, 22%);
+  --destructive: hsl(0, 93%, 73%);
+  --destructive-foreground: hsl(210, 22%, 22%);
+  --muted: hsl(210, 100%, 95%);
+  --muted-foreground: hsl(210, 22%, 22%);
+  --card: hsl(210, 100%, 97%);
+  --card-foreground: hsl(210, 22%, 22%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(341, 20%, 22%);
+  --border: hsl(210, 40%, 80%);
+  --input: hsl(210, 40%, 56%);
+  --ring: hsl(210, 40%, 60%);
+  --radius: 1rem;
+}
+
+/* General reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--background);
-    color: var(--foreground);
-    margin: 0;
-    padding: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
 }
 
-/* Dashboard Header */
-.dashboard-header {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    padding: 1rem;
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
 }
 
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+a {
+  color: var(--primary);
+  text-decoration: none;
 }
 
-.profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-/* Main Content */
-.dashboard-content {
-    padding: 2rem;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-input[type="text"], select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background-color: var(--input);
-    color: var(--foreground);
+a:hover, a:focus {
+  text-decoration: underline;
 }
 
 button {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
 }
 
-button:hover {
-    background-color: var(--accent-foreground);
-    color: var(--accent);
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-button:focus {
-    outline: 2px solid var(--ring);
+.dashboard-header, .dashboard-footer {
+  padding: 1rem 2rem;
+  background-color: var(--card);
 }
 
-/* Additional Styles */
-form {
-    background-color: var(--card);
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.profile-image {
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.3s;
+}
+
+.primary-btn {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.primary-btn:hover {
+  background-color: var(--accent-foreground);
+  color: var(--accent);
+}
+
+.secondary-btn {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.secondary-btn:hover {
+  background-color: var(--secondary-foreground);
+  color: var(--secondary);
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.875rem;
 }
 

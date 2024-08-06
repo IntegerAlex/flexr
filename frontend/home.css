@@ -1,28 +1,25 @@
-/* Root color variables */
 :root {
-  --background: hsl(210, 100%, 97%);
-  --foreground: hsl(339, 20%, 20%);
-  --primary: hsl(308, 56%, 85%);
-  --primary-foreground: hsl(210, 22%, 22%);
-  --secondary: hsl(196, 75%, 88%);
-  --secondary-foreground: hsl(210, 22%, 22%);
-  --accent: hsl(211, 86%, 70%);
-  --accent-foreground: hsl(210, 22%, 22%);
-  --destructive: hsl(0, 93%, 73%);
-  --destructive-foreground: hsl(210, 22%, 22%);
-  --muted: hsl(210, 100%, 95%);
-  --muted-foreground: hsl(210, 22%, 22%);
-  --card: hsl(210, 100%, 97%);
-  --card-foreground: hsl(210, 22%, 22%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(341, 20%, 22%);
-  --border: hsl(210, 40%, 80%);
-  --input: hsl(210, 40%, 56%);
-  --ring: hsl(210, 40%, 60%);
-  --radius: 1rem;
+  --background: #B0D4E8; /* Soft Sky Blue */
+  --foreground: #363636; /* Dark Gray */
+  --primary: #3085C5; /* Azure Blue */
+  --primary-foreground: #363636; /* Dark Gray (for contrast) */
+  --secondary: #D3D3D3; /* Light Gray */
+  --secondary-foreground: #363636; /* Dark Gray (for contrast) */
+  --accent: #00AEEF; /* Electric Blue */
+  --accent-foreground: #363636; /* Dark Gray (for contrast) */
+  --destructive: #FF5A5F; /* Destructive Red (you can adjust this if needed) */
+  --destructive-foreground: #363636; /* Dark Gray (for contrast) */
+  --muted: #F5F5F5; /* Pale Gray (you can adjust this too) */
+  --muted-foreground: #363636; /* Dark Gray (for contrast) */
+  --card: #B0D4E8; /* Soft Sky Blue (same as background) */
+  --card-foreground: #363636; /* Dark Gray (for contrast) */
+  --popover: #FFFFFF; /* White */
+  --popover-foreground: #363636; /* Dark Gray (for contrast) */
+  --border: #CCCCCC; /* Light Gray (you can adjust thickness and color) */
+  --input: #A0A0A0; /* Gray for input fields */
+  --ring: #999999; /* Gray for focus rings */
+  --radius: 1rem; /* Border radius for elements */
 }
-
-/* General reset and base styles */
 * {
   margin: 0;
   padding: 0;
@@ -53,268 +50,210 @@ a:hover, a:focus {
 button {
   border: none;
   cursor: pointer;
-  font-family: inherit;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
 }
 
-button:hover, button:focus {
-  outline: 2px solid var(--ring);
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Header styles */
-.header {
-  padding: 1rem;
+.site-header, .site-footer {
+  padding: 1rem 2rem;
+  background-color: var(--card);
+}
+
+.site-header {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
 }
 
-.header a {
+.logo {
   display: flex;
   align-items: center;
-  color: var(--primary);
-  text-decoration: none;
 }
 
-.header .nav {
-  margin-left: auto;
+.logo-icon {
+  margin-right: 0.5rem;
+}
+
+.main-nav {
   display: flex;
   gap: 1rem;
 }
 
-.header .nav a {
-  color: var(--foreground);
+.nav-item {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  transition: background-color 0.3s;
 }
 
-/* Main content styles */
-.main {
-  flex: 1;
-}
-
-.section {
-  padding: 3rem 1rem;
-}
-
-.section.bg-muted {
+.nav-item:hover {
   background-color: var(--muted);
 }
 
-.section .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+.content {
+  flex: 1;
 }
 
-.grid {
-  display: grid;
+.hero-section {
+  padding: 4rem 2rem;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  text-align: center;
 }
 
-.grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.grid-cols-5 {
-  grid-template-columns: repeat(5, 1fr);
-}
-
-.gap-6 {
-  gap: 1.5rem;
-}
-
-.gap-12 {
-  gap: 3rem;
-}
-
-.flex {
+.hero-content {
   display: flex;
-}
-
-.flex-col {
   flex-direction: column;
-}
-
-.flex-row {
-  flex-direction: row;
-}
-
-.items-center {
   align-items: center;
 }
 
-.justify-center {
-  justify-content: center;
+.hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.space-y-4 > * + * {
-  margin-top: 1rem;
-}
-
-.space-y-2 > * + * {
-  margin-top: 0.5rem;
-}
-
-.max-w-[600px] {
+.hero-description {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
   max-width: 600px;
 }
 
-.max-w-[900px] {
-  max-width: 900px;
-}
-
-.bg-primary {
-  background-color: var(--primary);
-}
-
-.bg-background {
-  background-color: var(--background);
-}
-
-.text-primary-foreground {
-  color: var(--primary-foreground);
-}
-
-.text-muted-foreground {
-  color: var(--muted-foreground);
-}
-
-.text-sm {
-  font-size: 0.875rem;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-}
-
-.text-3xl {
-  font-size: 1.875rem;
-}
-
-.text-5xl {
-  font-size: 3rem;
-}
-
-.font-medium {
-  font-weight: 500;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.font-heading {
-  font-weight: 700;
-}
-
-.font-body {
-  font-weight: 400;
-}
-
-.border {
-  border-width: 1px;
-}
-
-.rounded-md {
-  border-radius: 0.375rem;
-}
-
-.rounded-xl {
-  border-radius: 0.75rem;
-}
-
-.transition-colors {
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.shadow {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-}
-
-.hover\:bg-primary:hover {
-  background-color: var(--primary);
-}
-
-.hover\:bg-accent:hover {
-  background-color: var(--accent);
-}
-
-.focus-visible\:outline-none:focus-visible {
-  outline: none;
-}
-
-.focus-visible\:ring-1:focus-visible {
-  box-shadow: 0 0 0 1px var(--ring);
-}
-
-.disabled\:pointer-events-none:disabled {
-  pointer-events: none;
-}
-
-.disabled\:opacity-50:disabled {
-  opacity: 0.5;
-}
-
-.border-input {
-  border-color: var(--input);
-}
-
-.bg-input {
-  background-color: var(--input);
-}
-
-/* Footer styles */
-.footer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-
-.footer .nav {
-  margin-left: auto;
+.hero-buttons {
   display: flex;
   gap: 1rem;
 }
 
-.footer a {
-  color: var(--foreground);
-  font-size: 0.75rem;
+.hero-image {
+  margin-top: 2rem;
+  max-width: 100%;
+  height: auto;
 }
 
-/* Responsive design */
-@media (min-width: 640px) {
-  .md\:py-24 {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-  }
+.features-section, .benefits-section, .partners-section, .cta-section {
+  padding: 4rem 2rem;
+  text-align: center;
 }
 
-@media (min-width: 768px) {
-  .lg\:py-32 {
-    padding-top: 8rem;
-    padding-bottom: 8rem;
-  }
-
-  .lg\:grid-cols-[1fr_400px] {
-    grid-template-columns: 1fr 400px;
-  }
-
-  .lg\:order-last {
-    order: 1;
-  }
+.features-wrapper, .benefits-wrapper, .partners-wrapper, .cta-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-@media (min-width: 1024px) {
-  .xl\:py-48 {
-    padding-top: 12rem;
-    padding-bottom: 12rem;
-  }
-
-  .xl\:grid-cols-[1fr_600px] {
-    grid-template-columns: 1fr 600px;
-  }
+.features-header {
+  margin-bottom: 2rem;
 }
 
+.features-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.features-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.features-items {
+  list-style: none;
+  display: grid;
+  gap: 2rem;
+}
+
+.features-item {
+  text-align: left;
+}
+
+.features-item-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.features-item-description {
+  font-size: 1rem;
+}
+
+.benefits-buttons, .cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.partners-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.partner-logo {
+  max-height: 50px;
+  max-width: 100px;
+}
+
+.cta-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.3s;
+}
+
+.primary-btn {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.primary-btn:hover {
+  background-color: var(--accent-foreground);
+  color: var(--accent);
+}
+
+.secondary-btn {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.secondary-btn:hover {
+  background-color: var(--secondary-foreground);
+  color: var(--secondary);
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.875rem;
+}
