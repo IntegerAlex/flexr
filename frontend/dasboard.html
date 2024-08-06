@@ -1,74 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Setup Dashboard</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css" />
     <script src="https://unpkg.com/htmx.org@2.0.1"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="navbar">
-		<form id="logoutForm" action="https://flexr.flexhost.tech/logout" method="GET">
-  <button type="submit">Logout</button>
-</form>
- 
-                <img src="" alt="Profile Image" class="profile-image">
-                <h1>Project Setup Dashboard</h1>
-            </div>
-        </header>
-        <main class="dashboard-content">
-            <form id="project-setup-form" hx-post="/htmx/" hx-swap="innerHTML">
-                <div class="form-group">
-                    <label for="repoLink">Select Repository:</label>
-                    <select id="repoLink" name="repoLink">
-                        <option value="" disabled selected>Loading repositories...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="buildCommand">Build Command:</label>
-                    <input type="text" id="buildCommand" name="buildCommand" placeholder="Enter build command">
-                </div>
-                <div class="form-group">
-                    <label for="runCommand">Run Command:</label>
-                    <input type="text" id="runCommand" name="runCommand" placeholder="Enter run command">
-                </div>
-                <div class="form-group">
-                    <label for="entryPoint">Entry Point:</label>
-                    <input type="text" id="entryPoint" name="entryPoint" placeholder="Enter entry point">
-                </div>
-                <button type="submit">Deploy Application</button>
-            </form>
-        </main>
+      <header class="dashboard-header">
+        <div class="navbar">
+          <form
+            id="logoutForm"
+            action="https://flexr.flexhost.tech/logout"
+            method="GET"
+          >
+            <button type="submit">Logout</button>
+          </form>
+
+          <img src="" alt="Profile Image" class="profile-image" />
+          <h1>Project Setup Dashboard</h1>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        <form id="project-setup-form" hx-post="/htmx/" hx-swap="innerHTML">
+          <div class="form-group">
+            <label for="repoLink">Select Repository:</label>
+            <select id="repoLink" name="repoLink">
+              <option value="" disabled selected>
+                Loading repositories...
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="buildCommand">Build Command:</label>
+            <input
+              type="text"
+              id="buildCommand"
+              name="buildCommand"
+              placeholder="Enter build command"
+            />
+          </div>
+          <div class="form-group">
+            <label for="runCommand">Run Command:</label>
+            <input
+              type="text"
+              id="runCommand"
+              name="runCommand"
+              placeholder="Enter run command"
+            />
+          </div>
+          <div class="form-group">
+            <label for="entryPoint">Entry Point:</label>
+            <input
+              type="text"
+              id="entryPoint"
+              name="entryPoint"
+              placeholder="Enter entry point"
+            />
+          </div>
+          <button type="submit">Deploy Application</button>
+        </form>
+      </main>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch(`/v1/repositories?user_id=IntegerAlex`) // Replace with your API endpoint
-                .then(response => response.json())
-                .then(data => {
-                    const img = document.querySelector('.profile-image');
-                    img.src = data.avatar_url; // Fixed typo: avtar_url to avatar_url
-                    console.log(data);
-                    const projectNameSelect = document.getElementById('repoLink');
-                    projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
-                    data.repositories.forEach(repo => {
-                        const option = document.createElement('option');
-                        option.value = repo.url;
-                        option.textContent = repo.name;
-                        projectNameSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching repositories:', error);
-                    const projectNameSelect = document.getElementById('repoLink');
-                    projectNameSelect.innerHTML = '<option value="" disabled selected>Error loading repositories</option>';
-                });
-
-        });
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch(`/v1/repositories?user_id=IntegerAlex`) // Replace with your API endpoint
+          .then((response) => response.json())
+          .then((data) => {
+            const img = document.querySelector(".profile-image");
+            img.src = data.avatar_url; // Fixed typo: avtar_url to avatar_url
+            console.log(data);
+            const projectNameSelect = document.getElementById("repoLink");
+            projectNameSelect.innerHTML =
+              '<option value="" disabled selected>Select a repository</option>';
+            data.repositories.forEach((repo) => {
+              const option = document.createElement("option");
+              option.value = repo.url;
+              option.textContent = repo.name;
+              projectNameSelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching repositories:", error);
+            const projectNameSelect = document.getElementById("repoLink");
+            projectNameSelect.innerHTML =
+              '<option value="" disabled selected>Error loading repositories</option>';
+          });
+      });
     </script>
-</body>
+  </body>
 </html>
-
