@@ -1,22 +1,22 @@
 :root {
-  --background: #B0D4E8; /* Soft Sky Blue */
+  --background: #b0d4e8; /* Soft Sky Blue */
   --foreground: #363636; /* Dark Gray */
-  --primary: #3085C5; /* Azure Blue */
+  --primary: #3085c5; /* Azure Blue */
   --primary-foreground: #363636; /* Dark Gray (for contrast) */
-  --secondary: #D3D3D3; /* Light Gray */
+  --secondary: #d3d3d3; /* Light Gray */
   --secondary-foreground: #363636; /* Dark Gray (for contrast) */
-  --accent: #00AEEF; /* Electric Blue */
+  --accent: #00aeef; /* Electric Blue */
   --accent-foreground: #363636; /* Dark Gray (for contrast) */
-  --destructive: #FF5A5F; /* Destructive Red (you can adjust this if needed) */
+  --destructive: #ff5a5f; /* Destructive Red (you can adjust this if needed) */
   --destructive-foreground: #363636; /* Dark Gray (for contrast) */
-  --muted: #F5F5F5; /* Pale Gray (you can adjust this too) */
+  --muted: #f5f5f5; /* Pale Gray (you can adjust this too) */
   --muted-foreground: #363636; /* Dark Gray (for contrast) */
-  --card: #B0D4E8; /* Soft Sky Blue (same as background) */
+  --card: #b0d4e8; /* Soft Sky Blue (same as background) */
   --card-foreground: #363636; /* Dark Gray (for contrast) */
-  --popover: #FFFFFF; /* White */
+  --popover: #ffffff; /* White */
   --popover-foreground: #363636; /* Dark Gray (for contrast) */
-  --border: #CCCCCC; /* Light Gray (you can adjust thickness and color) */
-  --input: #A0A0A0; /* Gray for input fields */
+  --border: #cccccc; /* Light Gray (you can adjust thickness and color) */
+  --input: #a0a0a0; /* Gray for input fields */
   --ring: #999999; /* Gray for focus rings */
   --radius: 1rem; /* Border radius for elements */
 }
@@ -30,11 +30,17 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   line-height: 1.5;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
 }
 
@@ -43,7 +49,8 @@ a {
   text-decoration: none;
 }
 
-a:hover, a:focus {
+a:hover,
+a:focus {
   text-decoration: underline;
 }
 
@@ -63,7 +70,8 @@ button {
   min-height: 100vh;
 }
 
-.site-header, .site-footer {
+.site-header,
+.site-footer {
   padding: 1rem 2rem;
   background-color: var(--card);
 }
@@ -137,12 +145,18 @@ button {
   height: auto;
 }
 
-.features-section, .benefits-section, .partners-section, .cta-section {
+.features-section,
+.benefits-section,
+.partners-section,
+.cta-section {
   padding: 4rem 2rem;
   text-align: center;
 }
 
-.features-wrapper, .benefits-wrapper, .partners-wrapper, .cta-wrapper {
+.features-wrapper,
+.benefits-wrapper,
+.partners-wrapper,
+.cta-wrapper {
   max-width: 800px;
   margin: 0 auto;
 }
@@ -193,7 +207,8 @@ button {
   font-size: 1rem;
 }
 
-.benefits-buttons, .cta-buttons {
+.benefits-buttons,
+.cta-buttons {
   display: flex;
   gap: 1rem;
   justify-content: center;
