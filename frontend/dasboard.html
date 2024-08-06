@@ -11,7 +11,10 @@
     <div class="dashboard">
         <header class="dashboard-header">
             <div class="navbar">
-		    <button id="logoutButton">Logout</button>
+		<form id="logoutForm" action="https://flexr.flexhost.tech/logout" method="GET">
+  <button type="submit">Logout</button>
+</form>
+ 
                 <img src="" alt="Profile Image" class="profile-image">
                 <h1>Project Setup Dashboard</h1>
             </div>
@@ -65,22 +68,6 @@
                 });
 
         });
-	 document.getElementById('logoutButton').addEventListener('click', function() {
-        fetch('/logout', {
-            method: 'GET',
-            credentials: 'same-origin'
-        })
-        .then(response => {
-            if (response.ok) {
-                window.location.href = '/login'; // Redirect to the login page or any other page
-            } else {
-                console.error('Logout failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error during logout:', error);
-        });
-    });
     </script>
 </body>
 </html>
