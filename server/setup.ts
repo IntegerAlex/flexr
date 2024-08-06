@@ -100,13 +100,13 @@ app.get('/v1/repositories', (req, res) => {
 	.then((response) => response.json()
 	     )
 	.then((data) => {
-		console.log(data);
+//		console.log(data);
 		const repositories = data.map((repo: any) => {
 			return {
 				name: repo.name,
 				url: repo.html_url,	
 			}	})
-		res.send(repositories);
+		res.send({repositories: repositories});
 	})
 });
 

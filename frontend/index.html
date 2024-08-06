@@ -45,6 +45,7 @@
 		fetch(`/v1/repositories?user_id=IntegerAlex`)// Replace with your API endpoint
                 .then(response => response.json())
                 .then(data => {
+			console.log(data);
                     const projectNameSelect = document.getElementById('projectName');
                     projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
                     data.repositories.forEach(repo => {
