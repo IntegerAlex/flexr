@@ -42,11 +42,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-		fetch('/v1/repositories',{
-			query: {
-				user_id: 'IntegerAlex',
-			}
-		})// Replace with your API endpoint
+		fetch(`/v1/repositories?user_id=IntegerAlex`)// Replace with your API endpoint
                 .then(response => response.json())
                 .then(data => {
                     const projectNameSelect = document.getElementById('projectName');
