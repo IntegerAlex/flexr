@@ -36,6 +36,7 @@ app.post('/v1/runContainer', (req, res) => {
 
 		runContainer(projectName)
 		.then((containerId)=>{
+			console.log("runContainer"+containerId);
 			res.send(containerId);
 		})
 	})
@@ -106,7 +107,7 @@ app.get('/v1/repositories', (req, res) => {
 				name: repo.name,
 				url: repo.html_url,	
 			}	})
-		res.send({repositories: repositories, avtar_url: data[0].owner.avatar_url});
+		res.send({repositories: repositories, avatar_url: data[0].owner.avatar_url});
 	})
 });
 

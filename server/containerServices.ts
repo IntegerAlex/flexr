@@ -11,8 +11,8 @@ export async function runContainer(projectName: string): Promise<string> {
     try {
 	const port = await getPort(8081);
         const { stdout } = await execAsync(`podman run -d -p ${port}:8080 -t localhost/${projectName}:latest`);
-        createWriteStream('containerId.txt').write(stdout.trim());
-        return stdout;
+        createWriteStream('containerId.txt').write(stdout)
+        return stdout.trim()
 	 
     } catch (error) {
         console.error(`Error running container: ${error.message}`);

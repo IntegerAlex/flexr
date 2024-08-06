@@ -16,10 +16,10 @@
             </div>
         </header>
         <main class="dashboard-content">
-            <form id="project-setup-form">
+            <form id="project-setup-form" hx-post="/htmx/" hx-swap="innerHTML">
                 <div class="form-group">
-                    <label for="projectName">Select Repository:</label>
-                    <select id="projectName" name="projectName">
+                    <label for="repoLink">Select Repository:</label>
+                    <select id="repoLink" name="repoLink">
                         <option value="" disabled selected>Loading repositories...</option>
                     </select>
                 </div>
@@ -35,20 +35,20 @@
                     <label for="entryPoint">Entry Point:</label>
                     <input type="text" id="entryPoint" name="entryPoint" placeholder="Enter entry point">
                 </div>
-                <button type="submit" hx-post="/htmx/" hx-swap="innerHTML">Deploy Application</button>
+                <button type="submit">Deploy Application</button>
             </form>
         </main>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-		fetch(`/v1/repositories?user_id=IntegerAlex`)// Replace with your API endpoint
+            fetch(`/v1/repositories?user_id=IntegerAlex`) // Replace with your API endpoint
                 .then(response => response.json())
                 .then(data => {
-			const img = document.querySelector('.profile-image');
-			img.src = data.avatar_url;
-			console.log(data);
-                    const projectNameSelect = document.getElementById('projectName');
+                    const img = document.querySelector('.profile-image');
+                    img.src = data.avatar_url; // Fixed typo: avtar_url to avatar_url
+                    console.log(data);
+                    const projectNameSelect = document.getElementById('repoLink');
                     projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
                     data.repositories.forEach(repo => {
                         const option = document.createElement('option');
@@ -59,9 +59,10 @@
                 })
                 .catch(error => {
                     console.error('Error fetching repositories:', error);
-                    const projectNameSelect = document.getElementById('projectName');
+                    const projectNameSelect = document.getElementById('repoLink');
                     projectNameSelect.innerHTML = '<option value="" disabled selected>Error loading repositories</option>';
                 });
+
         });
     </script>
 </body>

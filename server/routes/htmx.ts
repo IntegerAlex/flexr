@@ -4,7 +4,8 @@ import path from "path";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { projectName, repoLink, entryPoint } = req.body;
+  const { buildCommand , runCommand ,repoLink, entryPoint } = req.body;
+  const projectName = repoLink.split("/").pop().split(".")[0];
   console.log(projectName, repoLink, entryPoint);
 
   res.send("<p>Debugging... please Wait</p>");
@@ -19,8 +20,7 @@ router.post("/", async (req, res) => {
       entryPoint: entryPoint,
     }),
   }).then((response) => {
-    response.json();
-    console.log(response.body);
+	console.log(response);
   });
 
 });
