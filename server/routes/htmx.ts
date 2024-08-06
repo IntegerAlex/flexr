@@ -4,7 +4,7 @@ import path from "path";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { buildCommand , runCommand ,repoLink, entryPoint } = req.body;
+  const { buildCommand, runCommand, repoLink, entryPoint } = req.body;
   const projectName = repoLink.split("/").pop().split(".")[0];
   console.log(projectName, repoLink, entryPoint);
 
@@ -20,15 +20,11 @@ router.post("/", async (req, res) => {
       entryPoint: entryPoint,
     }),
   }).then((response) => {
-	console.log(response);
+    console.log(response);
   });
-
 });
 //db.addContainer(containerId , projectName , repoLink , entryPoint)
 
-
-	//res.send("<p>Deploying... please Wait</p>");
-
-
+//res.send("<p>Deploying... please Wait</p>");
 
 export default router;
