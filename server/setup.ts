@@ -69,7 +69,7 @@ app.use(auth(config));
 app.get('/', (req, res) => {
     console.log('Accessing root route');
     if (req.oidc.isAuthenticated()) {
-	    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+	    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
 	    //res.send(req.oidc.isAuthenticated());
     } else {
         console.log('User is not authenticated, redirecting to /login');
