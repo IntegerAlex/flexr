@@ -106,7 +106,7 @@ app.get('/v1/repositories', (req, res) => {
 				name: repo.name,
 				url: repo.html_url,	
 			}	})
-		res.send({repositories: repositories});
+		res.send({repositories: repositories, avtar_url: data[0].owner.avatar_url});
 	})
 });
 

@@ -11,7 +11,7 @@
     <div class="dashboard">
         <header class="dashboard-header">
             <div class="navbar">
-                <img src="profile.jpg" alt="Profile Image" class="profile-image">
+                <img src="" alt="Profile Image" class="profile-image">
                 <h1>Project Setup Dashboard</h1>
             </div>
         </header>
@@ -35,7 +35,7 @@
                     <label for="entryPoint">Entry Point:</label>
                     <input type="text" id="entryPoint" name="entryPoint" placeholder="Enter entry point">
                 </div>
-                <button type="submit" hx-post="/htmx/" hx-swap="innerHTML">Save Configuration</button>
+                <button type="submit" hx-post="/htmx/" hx-swap="innerHTML">Deploy Application</button>
             </form>
         </main>
     </div>
@@ -45,6 +45,8 @@
 		fetch(`/v1/repositories?user_id=IntegerAlex`)// Replace with your API endpoint
                 .then(response => response.json())
                 .then(data => {
+			const img = document.querySelector('.profile-image');
+			img.src = data.avatar_url;
 			console.log(data);
                     const projectNameSelect = document.getElementById('projectName');
                     projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
