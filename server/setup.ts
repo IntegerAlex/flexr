@@ -26,7 +26,7 @@ app.get('/v1/health', (req, res) => {
 
 app.post('/v1/runContainer', (req, res) => {
 	const { projectName, repoLink ,entryPoint }= req.body as { projectName: string, repoLink: string, entryPoint: string };
-	// run container
+//run container
 	if(!projectName || !repoLink || !entryPoint){
 		res.send('Invalid Request');
 	}
@@ -85,6 +85,7 @@ app.get('/home', (req, res) => {
 // Index route
 app.get('/callback', (req, res) => {
   //  console.log('User accessed /index'+req.query);
+	console.log(req.oidc.user);
 	res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
