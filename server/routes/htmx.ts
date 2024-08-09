@@ -26,11 +26,11 @@ router.post("/", async (req, res) => {
       runCommand:(!runCommand)?"node":runCommand,
       entryPoint: entryPoint,
     }),
-  }).then((response) => {
-	  //res.send(response.json().containerId)
-	//console.log(response);
-	response.json()
-  }).then((data) => {
+  })
+  .then((response) => { 
+	return response.json()
+  })
+  .then((data) => {
 	  console.log(data);
 	  const containerId = data.containerId;
 	  res.send(`<p>Container ID: ${containerId}</p>`);

@@ -36,8 +36,9 @@ app.post('/v1/runContainer', (req, res) => {
 
 		runContainer(projectName)
 		.then((containerId)=>{
+
 			console.log("runContainer"+containerId);
-			res.send({containerId:containerId});
+			res.json({containerId:containerId});
 		})
 	})
 	.catch((err)=>{
