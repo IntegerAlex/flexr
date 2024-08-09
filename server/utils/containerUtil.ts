@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 RUN npm install && ${buildCommand}
 EXPOSE 8080
-CMD ["node", "${entryPoint}"]
+CMD ["${runCommand}", "${entryPoint}"]
 `;
 
 function isPortInUse(port:number, host = '127.0.0.1') {
