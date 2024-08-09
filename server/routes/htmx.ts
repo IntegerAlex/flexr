@@ -4,7 +4,7 @@ import path from "path";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  let { buildCommand , runCommand ,repoLink, entryPoint } = req.body;
+  const { buildCommand , runCommand ,repoLink, entryPoint } = req.body;
   const projectName = repoLink.split("/").pop().split(".")[0];
   console.log(projectName, repoLink, entryPoint);
 	if(!buildCommand){
