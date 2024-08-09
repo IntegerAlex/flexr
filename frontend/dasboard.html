@@ -59,7 +59,8 @@
                         option.value = repo.url;
                         option.textContent = repo.name;
                         projectNameSelect.appendChild(option);
-                    });
+
+		document.getElementById('project-setup-form').innerHTML = 'Deploying...';
                 })
                 .catch(error => {
                     console.error('Error fetching repositories:', error);
@@ -69,8 +70,7 @@
 
         });
 
-	document.getElementById('sumbitBtn').addEventListener('click', function() {
-		document.getElementById('project-setup-form').innerHTML = 'Deploying...';
+
 	});
     </script>
 </body>
