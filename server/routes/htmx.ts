@@ -4,15 +4,15 @@ import path from "path";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { buildCommand , runCommand ,repoLink, entryPoint } = req.body;
+  const { buildCommand, runCommand, repoLink, entryPoint } = req.body;
   const projectName = repoLink.split("/").pop().split(".")[0];
   console.log(projectName, repoLink, entryPoint);
-	if(!buildCommand){
-		buildCommand = 	"npm install"
-	}
-	if(!runCommand){
-		runCommand = "node"
-	}
+  if (!buildCommand) {
+    buildCommand = "npm install";
+  }
+  if (!runCommand) {
+    runCommand = "node";
+  }
   res.send("<p>Debugging... please Wait</p>");
   await fetch("http://localhost:8080/v1/runContainer", {
     method: "POST",
@@ -22,20 +22,16 @@ router.post("/", async (req, res) => {
     body: JSON.stringify({
       projectName: projectName,
       repoLink: repoLink,
-      buildCommand:buildCommand,
-      runCommand:runCommand,
+      buildCommand: buildCommand,
+      runCommand: runCommand,
       entryPoint: entryPoint,
     }),
   }).then((response) => {
-	console.log(response);
+    console.log(response);
   });
-
 });
 //db.addContainer(containerId , projectName , repoLink , entryPoint)
 
-
-	//res.send("<p>Deploying... please Wait</p>");
-
-
+//res.send("<p>Deploying... please Wait</p>");
 
 export default router;
