@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
 	//if(!runCommand){
 	//	runCommand = "node"
 	//}
-  res.send("<p>Debugging... please Wait</p>");
+  //res.send("<p>Debugging... please Wait</p>");
   await fetch("http://localhost:8080/v1/runContainer", {
     method: "POST",
     headers: {
@@ -27,8 +27,17 @@ router.post("/", async (req, res) => {
       entryPoint: entryPoint,
     }),
   }).then((response) => {
-	console.log(response);
-  });
+	  //res.send(response.json().containerId)
+	//console.log(response);
+	response.json()
+  }).then((data) => {
+	  console.log(data);
+	  const containerId = data.containerId;
+	  res.send(`<p>Container ID: ${containerId}</p>`);
+}).catch((error) => {	
+	console.error('Error:', error);
+	res.send('Error');	
+});
 
 });
 //db.addContainer(containerId , projectName , repoLink , entryPoint)
