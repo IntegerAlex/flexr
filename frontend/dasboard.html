@@ -39,7 +39,7 @@
                     <label for="entryPoint">Entry Point:</label>
                     <input type="text" id="entryPoint" name="entryPoint" placeholder="Enter entry point">
                 </div>
-                <button type="submit">Deploy Application</button>
+                <button id="sumbitBtn" type="submit">Deploy Application</button>
             </form>
         </main>
     </div>
@@ -68,6 +68,10 @@
                 });
 
         });
+
+	document.getElementById('sumbitBtn').addEventListener('click', function() {
+		document.getElementById('project-setup-form').innerHTML = 'Deploying...';
+	});
     </script>
 </body>
 </html>
