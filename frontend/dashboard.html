@@ -1,92 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Setup Dashboard</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css" />
     <script src="https://unpkg.com/htmx.org@2.0.1"></script>
     <style>
-        .loading {
-            display: none;
-            color: #ff9800;
-            font-size: 1.2em;
-        }
+      .loading {
+        display: none;
+        color: #ff9800;
+        font-size: 1.2em;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="navbar">
-                <form id="logoutForm" action="https://flexr.flexhost.tech/logout" method="GET">
-                    <button type="submit">Logout</button>
-                </form>
-                <img src="" alt="Profile Image" class="profile-image">
-                <h1>Project Setup Dashboard</h1>
-            </div>
-        </header>
-        <main class="dashboard-content">
-            <form id="project-setup-form" hx-post="/htmx/" hx-target="#response-container" hx-trigger="submit">
-                <div class="form-group">
-                    <label for="repoLink">Select Repository:</label>
-                    <select id="repoLink" name="repoLink">
-                        <option value="" disabled selected>Loading repositories...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="buildCommand">Build Command:</label>
-                    <input type="text" id="buildCommand" name="buildCommand" placeholder="Enter build command">
-                </div>
-                <div class="form-group">
-                    <label for="runCommand">Run Command:</label>
-                    <input type="text" id="runCommand" name="runCommand" placeholder="Enter run command">
-                </div>
-                <div class="form-group">
-                    <label for="entryPoint">Entry Point:</label>
-                    <input type="text" id="entryPoint" name="entryPoint" placeholder="Enter entry point">
-                </div>
-                <button id="submitBtn" type="submit">Deploy Application</button>
-            </form>
-            <div id="response-container"></div>
-            <div id="loading-message" class="loading">Deploying...</div>
-        </main>
+      <header class="dashboard-header">
+        <div class="navbar">
+          <form
+            id="logoutForm"
+            action="https://flexr.flexhost.tech/logout"
+            method="GET"
+          >
+            <button type="submit">Logout</button>
+          </form>
+          <img src="" alt="Profile Image" class="profile-image" />
+          <h1>Project Setup Dashboard</h1>
+        </div>
+      </header>
+      <main class="dashboard-content">
+        <form
+          id="project-setup-form"
+          hx-post="/htmx/"
+          hx-target="#response-container"
+          hx-trigger="submit"
+        >
+          <div class="form-group">
+            <label for="repoLink">Select Repository:</label>
+            <select id="repoLink" name="repoLink">
+              <option value="" disabled selected>
+                Loading repositories...
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="buildCommand">Build Command:</label>
+            <input
+              type="text"
+              id="buildCommand"
+              name="buildCommand"
+              placeholder="Enter build command"
+            />
+          </div>
+          <div class="form-group">
+            <label for="runCommand">Run Command:</label>
+            <input
+              type="text"
+              id="runCommand"
+              name="runCommand"
+              placeholder="Enter run command"
+            />
+          </div>
+          <div class="form-group">
+            <label for="entryPoint">Entry Point:</label>
+            <input
+              type="text"
+              id="entryPoint"
+              name="entryPoint"
+              placeholder="Enter entry point"
+            />
+          </div>
+          <button id="submitBtn" type="submit">Deploy Application</button>
+        </form>
+        <div id="response-container"></div>
+        <div id="loading-message" class="loading">Deploying...</div>
+      </main>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch(`/v1/repositories?user_id=IntegerAlex`) // Replace with your API endpoint
-                .then(response => response.json())
-                .then(data => {
-                    const img = document.querySelector('.profile-image');
-                    img.src = data.avatar_url;
-                    const projectNameSelect = document.getElementById('repoLink');
-                    projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
-                    data.repositories.forEach(repo => {
-                        const option = document.createElement('option');
-                        option.value = repo.url;
-                        option.textContent = repo.name;
-                        projectNameSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching repositories:', error);
-                    const projectNameSelect = document.getElementById('repoLink');
-                    projectNameSelect.innerHTML = '<option value="" disabled selected>Error loading repositories</option>';
-                });
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch(`/v1/repositories?user_id=IntegerAlex`) // Replace with your API endpoint
+          .then((response) => response.json())
+          .then((data) => {
+            const img = document.querySelector(".profile-image");
+            img.src = data.avatar_url;
+            const projectNameSelect = document.getElementById("repoLink");
+            projectNameSelect.innerHTML =
+              '<option value="" disabled selected>Select a repository</option>';
+            data.repositories.forEach((repo) => {
+              const option = document.createElement("option");
+              option.value = repo.url;
+              option.textContent = repo.name;
+              projectNameSelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching repositories:", error);
+            const projectNameSelect = document.getElementById("repoLink");
+            projectNameSelect.innerHTML =
+              '<option value="" disabled selected>Error loading repositories</option>';
+          });
+      });
+
+      document
+        .getElementById("project-setup-form")
+        .addEventListener("htmx:beforeRequest", function () {
+          document.getElementById("loading-message").style.display = "block";
         });
 
-        document.getElementById('project-setup-form').addEventListener('htmx:beforeRequest', function() {
-            document.getElementById('loading-message').style.display = 'block';
+      document
+        .getElementById("project-setup-form")
+        .addEventListener("htmx:afterSwap", function () {
+          document.getElementById("loading-message").style.display = "none";
         });
 
-        document.getElementById('project-setup-form').addEventListener('htmx:afterSwap', function() {
-            document.getElementById('loading-message').style.display = 'none';
-        });
-
-        document.getElementById('project-setup-form').addEventListener('htmx:afterRequest', function() {
-            document.getElementById('loading-message').style.display = 'none';
+      document
+        .getElementById("project-setup-form")
+        .addEventListener("htmx:afterRequest", function () {
+          document.getElementById("loading-message").style.display = "none";
         });
     </script>
-</body>
+  </body>
 </html>
-
