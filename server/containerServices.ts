@@ -20,7 +20,7 @@ export async function runContainer(projectName: string): Promise<string> {
     }
 }
 
-export async function createImage(buildCommand:string ,projectName: string, repoLink: string, entryPoint: string,runCommand:string): Promise<string> {
+export async function createImage(projectName: string, repoLink: string, entryPoint: string,buildCommand:string,runCommand:string): Promise<string> {
     if (!projectName || !repoLink) {
         throw new Error('Invalid input'); 
     }
