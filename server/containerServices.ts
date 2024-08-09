@@ -47,7 +47,7 @@ async function generateDockerFile(projectName: string, repoLink: string, entryPo
             console.log('Dockerfile already exists, skipping creation.');
         } catch {
             // Create Dockerfile if it doesn't exist
-            writeFileSync('Dockerfile', dockerFile(buildCommand,entryPoint , runCommand));
+            writeFileSync('Dockerfile', dockerFile(entryPoint , buildCommand,runCommand));
             console.log('Dockerfile created.');
         }
     } catch (error) {
