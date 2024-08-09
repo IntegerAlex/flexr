@@ -20,13 +20,13 @@ export async function runContainer(projectName: string): Promise<string> {
     }
 }
 
-export async function createImage(buildCommand:string ,projectName: string, repoLink: string, entryPoint: string): Promise<string> {
+export async function createImage(buildCommand:string ,projectName: string, repoLink: string, entryPoint: string,runCommand:string): Promise<string> {
     if (!projectName || !repoLink) {
         throw new Error('Invalid input'); 
     }
 
     try {
-        await generateDockerFile(projectName, repoLink, entryPoint , buildCommand);
+        await generateDockerFile(projectName, repoLink, entryPoint , buildCommand , runCommand);
         const { stdout } = await execAsync(`buildah build -t ${projectName} .`);
         console.log(`Image built: ${stdout}`);
         return projectName;
@@ -36,7 +36,7 @@ export async function createImage(buildCommand:string ,projectName: string, repo
     }
 }
 
-async function generateDockerFile(projectName: string, repoLink: string, entryPoint: string, buildCommand:string): Promise<void> {
+async function generateDockerFile(projectName: string, repoLink: string, entryPoint: string, buildCommand:string , runCommand:string): Promise<void> {
     try {
         await execAsync(`git clone ${repoLink}`);
         process.chdir(projectName); // Change directory to project folder
@@ -47,7 +47,7 @@ async function generateDockerFile(projectName: string, repoLink: string, entryPo
             console.log('Dockerfile already exists, skipping creation.');
         } catch {
             // Create Dockerfile if it doesn't exist
-            writeFileSync('Dockerfile', dockerFile(buildCommand,entryPoint));
+            writeFileSync('Dockerfile', dockerFile(buildCommand,entryPoint , runCommand));
             console.log('Dockerfile created.');
         }
     } catch (error) {

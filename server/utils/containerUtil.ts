@@ -1,6 +1,6 @@
 import net from 'net';
 
-export const dockerFile = (entryPoint: string,buildCommand:string) => `
+export const dockerFile = (entryPoint: string,buildCommand:string,runCommand:string) => `
 FROM node:22-alpine
 WORKDIR /app
 COPY . .

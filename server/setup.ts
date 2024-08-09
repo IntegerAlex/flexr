@@ -25,13 +25,13 @@ app.get('/v1/health', (req, res) => {
 	});
 
 app.post('/v1/runContainer', (req, res) => {
-	const { projectName, repoLink ,entryPoint }= req.body as { projectName: string, repoLink: string, entryPoint: string };
+	const { projectName, repoLink ,entryPoint ,buildCommand , runCommand }= req.body as { projectName: string, repoLink: string, entryPoint: string  , buildCommand: string , runCommand: string};
 //run container
 	if(!projectName || !repoLink || !entryPoint){
 		res.send('Invalid Request');
 	}
-	console.log(projectName, repoLink, entryPoint);
- 	createImage(projectName, repoLink , entryPoint)
+	console.log(projectName, repoLink, entryPoint , buildCommand , runCommand);
+ 	createImage(projectName, repoLink , entryPoint, buildCommand,runCommand)
 	.then((projectName)=>{
 
 		runContainer(projectName)
