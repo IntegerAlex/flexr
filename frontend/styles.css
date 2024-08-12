@@ -80,18 +80,34 @@ button {
 .navbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .profile-image {
-  margin-right: 0.5rem;
   border-radius: 50%;
   width: 40px;
   height: 40px;
 }
 
-.dashboard-content {
+.dashboard-main {
+  display: flex;
   flex: 1;
   padding: 2rem;
+}
+
+.deployments-container {
+  flex: 1;
+  margin-right: 2rem;
+  background-color: var(--card);
+  padding: 1rem;
+  border-radius: var(--radius);
+}
+
+.project-setup-container {
+  flex: 2;
+  background-color: var(--card);
+  padding: 1rem;
+  border-radius: var(--radius);
 }
 
 .form-group {
