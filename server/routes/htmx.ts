@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 
 router.get("/deployments", async (req, res) => {
     try {
-        fetch("http://localhost:8080/v1/profile")
+        fetch("https://flexr.flexhost.tech/v1/profile")
 		.then((response) => {
 		return response.json();
 	}).then(async(data) => {
