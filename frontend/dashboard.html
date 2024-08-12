@@ -36,6 +36,7 @@
                 </div>
             </aside>
             <section class="project-setup-container">
+		    <input type="hidden" id="userName" name="userName" value="">
                 <form id="project-setup-form" hx-post="/htmx/" hx-target="#response-container" hx-trigger="submit">
                     <div class="form-group">
                         <label for="repoLink">Select Repository:</label>
@@ -73,7 +74,8 @@
                     return response.json();
                 })
                 .then(response => {
-                    const nickname = response.nickname;
+		const nickname = response.nickname;
+            	document.getElementById('userName').value = nickname; 
                     fetch(`/v1/repositories?user_id=${nickname}`) // Replace with your API endpoint
                         .then(response => response.json())
                         .then(data => {

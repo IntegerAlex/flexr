@@ -4,7 +4,7 @@ import path from "path";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { buildCommand , runCommand ,repoLink, entryPoint } = req.body;
+  const { userName , buildCommand , runCommand ,repoLink, entryPoint } = req.body;
   const projectName = repoLink.split("/").pop().split(".")[0];
   console.log(projectName, repoLink, entryPoint);
 	//if(!buildCommand){
@@ -20,6 +20,7 @@ router.post("/", async (req, res) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+	    userName: userName,
       projectName: projectName,
       repoLink: repoLink,
       buildCommand:(!buildCommand)?"npm install":buildCommand,
@@ -44,7 +45,20 @@ router.post("/", async (req, res) => {
 
 
 	//res.send("<p>Deploying... please Wait</p>");
+router.get("/deployments", async (req, res) => {
+	db.getContainers().then((containers) => {
+		const deployments = [];
+		for	(const container of containers){
+			deployments.push(
+				`<p>Container ID: ${container.containerId}</p>`
+			)
+		}
+		res.send(deployments.join(""));
+		
 
+});
+	
+});
 
 
 export default router;

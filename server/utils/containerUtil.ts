@@ -1,5 +1,5 @@
 import net from 'net';
-
+import fs from 'fs';
 export const dockerFile = (entryPoint: string,buildCommand:string,runCommand:string) => `
 FROM node:22-alpine
 WORKDIR /app
@@ -41,4 +41,9 @@ export async function getPort(findPort: number) {
         return findPort;
     }
 }
-
+export function createDirectory(userName: string) {
+	if (!fs.existsSync(`/home/${userName}`)) {
+		fs.mkdirSync(`/home/${userName}`);	
+	}
+	return true;
+}
