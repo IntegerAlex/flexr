@@ -57,6 +57,9 @@ router.get("/deployments", async (req, res) => {
 	//	const userName = data.nickname;
 
 	const deployments = await getDeployments(userName);
+	if (!deployments || deployments.length === 0) {
+            return res.send("<p>No deployments found</p>");
+        }
 
         const deploymentsHTML = deployments.map(deployment => {
             return `
