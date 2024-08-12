@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
 	  const containerId = data.containerId;
 	  res.send(`<p>Container ID: ${containerId}</p>`);
 }).catch((error) => {	
-	console.error('Error:', error);
+	console.error('Error:',  error);
 	res.send('Error');	
 });
 
@@ -49,8 +49,14 @@ router.post("/", async (req, res) => {
 
 router.get("/deployments", async (req, res) => {
     try {
-        const userName = req.oidc.user.nickname;
-        const deployments = await getDeployments(userName);
+        fetch("http://localhost:8080/v1/profile")
+		.then((response) => {
+		return response.json();
+	}).then(async(data) => {
+
+		const userName = data.nickname;
+
+	const deployments = await getDeployments(userName);
 
         const deploymentsHTML = deployments.map(deployment => {
             return `
@@ -68,9 +74,10 @@ router.get("/deployments", async (req, res) => {
                 ${deploymentsHTML}
             </div>
         `);
+	})
     } catch (error) {
         console.error('Error fetching deployments:', error);
-        res.status(500).send('Internal Server Error');
+        res.send("<p>Error fetching deployments</p>");
     }
 });
 
