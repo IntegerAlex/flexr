@@ -54,7 +54,11 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch(`/v1/repositories?user_id=IntegerAlex`) // Replace with your API endpoint
+		fetch('/v1/profile')
+			.then(response => {
+			const nickname = response.nickname;
+
+		fetch(`/v1/repositories?user_id=${nickname}`) // Replace with your API endpoint
                 .then(response => response.json())
                 .then(data => {
                     const img = document.querySelector('.profile-image');
@@ -74,6 +78,7 @@
                     projectNameSelect.innerHTML = '<option value="" disabled selected>Error loading repositories</option>';
                 });
         });
+	});
 
         document.getElementById('project-setup-form').addEventListener('htmx:beforeRequest', function() {
             document.getElementById('loading-message').style.display = 'block';

@@ -91,7 +91,7 @@ app.get('/callback', (req, res) => {
 });
 
 // Profile route, protected by authentication
-app.get('/profile', requiresAuth(), (req, res) => {
+app.get('/v1/profile', requiresAuth(), (req, res) => {
     console.log('User accessed /profile');
     res.json({nickname :req.oidc.user.nickname});
 });
