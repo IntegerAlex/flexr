@@ -13,5 +13,5 @@ export async function createTableDeployments(){
 
 
 
-createTableDeployments();
-console.log('Table created');
+
+

@@ -35,3 +35,4 @@ class db {
 }
 const database = new db();
 export default database;
+createTableDeployments();
