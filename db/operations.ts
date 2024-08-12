@@ -15,7 +15,7 @@ export async function getDeployments(userName:string){
 
 export async function postDeployment(userName: string, containerId: string) {
     const query = `
-        INSERT INTO deployments (user_name, deployment_id)
+        INSERT INTO deployments (user_name, container_id)
         VALUES ($1, $2);
     `;
 
