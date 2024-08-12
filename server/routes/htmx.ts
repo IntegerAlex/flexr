@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
-
+import {getDeployments} from "../../db/operations";
+import { get } from "http";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -45,20 +46,32 @@ router.post("/", async (req, res) => {
 
 
 	//res.send("<p>Deploying... please Wait</p>");
+
 router.get("/deployments", async (req, res) => {
-	db.getContainers().then((containers) => {
-		const deployments = [];
-		for	(const container of containers){
-			deployments.push(
-				`<p>Container ID: ${container.containerId}</p>`
-			)
-		}
-		res.send(deployments.join(""));
-		
+    try {
+        const userName = req.oidc.user.nickname;
+        const deployments = await getDeployments(userName);
 
-});
-	
-});
+        const deploymentsHTML = deployments.map(deployment => {
+            return `
+                <div class="deployment-item">
+                    <h3>${deployment.projectName}</h3>
+                    <p>Status: ${deployment.status}</p>
+                    <p>Deployed at: ${new Date(deployment.time).toLocaleString()}</p>
+                    <p>Deployment ID: ${deployment.deployment_id}</p>
+                </div>
+            `;
+        }).join('');
 
+        res.send(`
+            <div class="deployments-container">
+                ${deploymentsHTML}
+            </div>
+        `);
+    } catch (error) {
+        console.error('Error fetching deployments:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 export default router;

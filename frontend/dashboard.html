@@ -31,9 +31,10 @@
         <main class="dashboard-main">
             <aside class="deployments-container">
                 <h2>Deployments</h2>
-                <div id="deployments-list">
-                    <!-- Deployment items will be dynamically added here -->
-                </div>
+		<div id="deployments-list" hx-get="/htmx/deployments" hx-trigger="load">
+    <!-- Deployment items will be dynamically added here -->
+</div>
+
             </aside>
             <section class="project-setup-container">
                 <form id="project-setup-form" hx-post="/htmx/" hx-target="#response-container" hx-trigger="submit">
@@ -112,6 +113,7 @@
         document.getElementById('project-setup-form').addEventListener('htmx:afterRequest', function() {
             document.getElementById('loading-message').style.display = 'none';
         });
+	
     </script>
 </body>
 </html>

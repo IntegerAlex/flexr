@@ -13,7 +13,12 @@ class db {
       port: 5432, // Default PostgreSQL port
     });
 
-    this.client.connect();
+    this.client.connect().then(() => {
+	console.log('Connected to database');
+    }).catch((err) => {
+	console.log('Error connecting to database');
+	console.log(err);
+    });
 	createTableDeployments();
   }
 	
