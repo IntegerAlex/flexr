@@ -7,7 +7,7 @@ export async function createTableDeployments() {
                 id SERIAL PRIMARY KEY,
                 container_id VARCHAR(255) NOT NULL,
                 user_name VARCHAR(255) NOT NULL,
-                time TIMESTAMP NOT NULL,
+                time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 status VARCHAR(255) NOT NULL
             );
         `);
