@@ -23,14 +23,15 @@ class db {
 	
   }
 	
-  dbQuery = async (query: string) => {
+ async dbQuery(query: string, values?: any[]): Promise<any> {
     try {
-      const res = await this.client.query(query);
-      return res.rows;
-    } catch (err) {
-      console.log(err);
+        const result = await client.query(query, values);
+        return result;
+    } catch (error) {
+        console.error('Database query error:', error);
+        throw error;
     }
-  }
+ }
 	
 }
 const database = new db();
