@@ -56,6 +56,12 @@
         document.addEventListener("DOMContentLoaded", function() {
 		fetch('/v1/profile')
 			.then(response => {
+				if (!response.ok) {
+					throw new Error('Failed to fetch profile');
+				}
+				return response.json();
+			}).
+			then(response => {
 			const nickname = response.nickname;
 
 		fetch(`/v1/repositories?user_id=${nickname}`) // Replace with your API endpoint
