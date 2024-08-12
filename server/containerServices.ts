@@ -12,7 +12,7 @@ export async function runContainer(username: string, projectName: string): Promi
 
     try {
         const port = await getPort(8081);
-        const imageName = `${username}-${projectName}`;
+        const imageName = `${username.toLowerCase()}-${projectName}`;
         const { stdout } = await execAsync(`podman run -d -p ${port}:8080 -t localhost/${imageName}:latest`);
         createWriteStream('containerId.txt').write(stdout);
         return stdout.trim();
@@ -29,7 +29,7 @@ export async function createImage(username: string, projectName: string, repoLin
 
     try {
         await generateDockerFile(username, projectName, repoLink, entryPoint, buildCommand, runCommand);
-        const imageName = `${username}-${projectName}`;
+        const imageName = `${username.toLowerCase()}-${projectName}`;
         const { stdout } = await execAsync(`buildah build -t ${imageName} .`);
         console.log(`Image built: ${stdout}`);
         return imageName;
@@ -42,7 +42,7 @@ export async function createImage(username: string, projectName: string, repoLin
 async function generateDockerFile(username: string, projectName: string, repoLink: string, entryPoint: string, buildCommand: string, runCommand: string): Promise<void> {
     try {
         // Change directory to username folder
-        process.chdir(`/home/akshat/${username}`);
+        process.chdir(`/home/akshat/${username.toLowerCase()}`);
 
         // Clone the repository into the project directory
         await execAsync(`git clone ${repoLink}`);
