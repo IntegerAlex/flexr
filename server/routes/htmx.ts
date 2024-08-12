@@ -49,12 +49,12 @@ router.post("/", async (req, res) => {
 
 router.get("/deployments", async (req, res) => {
     try {
-        const response = await  fetch("http://localhost:8080/v1/profile")
-	const data = await response.json();
-
-
-
-		const userName = data.nickname;
+        const userName = await req.oidc.user.nickname; 
+	//const data = await response.json();
+	//
+	//
+	//
+	//	const userName = data.nickname;
 
 	const deployments = await getDeployments(userName);
 
