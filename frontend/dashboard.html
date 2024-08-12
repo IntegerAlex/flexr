@@ -31,9 +31,13 @@
         <main class="dashboard-main">
             <aside class="deployments-container">
                 <h2>Deployments</h2>
-		<div id="deployments-list" hx-get="/htmx/deployments" hx-trigger="load">
+
+<div id="deployments-list" hx-get="/htmx/deployments" hx-trigger="load"
+     hx-vals='getNicknameVals()'
+     hx-delay="5">
     <!-- Deployment items will be dynamically added here -->
 </div>
+
 
             </aside>
             <section class="project-setup-container">
@@ -79,6 +83,9 @@
                 })
                 .then(response => {
 		const nickname = response.nickname;
+		getNicknameVals = function() {
+			return {nickname: nickname};
+		};
             	document.getElementById('userName').value = nickname; 
                     fetch(`/v1/repositories?user_id=${nickname}`) // Replace with your API endpoint
                         .then(response => response.json())

@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 
 router.get("/deployments", async (req, res) => {
     try {
-        const userName = await req.oidc.user.nickname; 
+        const userName =  req.query.userName as string;
 	//const data = await response.json();
 	//
 	//
