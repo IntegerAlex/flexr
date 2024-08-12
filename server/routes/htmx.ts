@@ -50,6 +50,7 @@ router.post("/", async (req, res) => {
 router.get("/deployments", async (req, res) => {
     try {
         const userName =  req.query.userName as string;
+	console.log(userName);
 	//const data = await response.json();
 	//
 	//

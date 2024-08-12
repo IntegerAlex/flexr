@@ -83,9 +83,12 @@
                 })
                 .then(response => {
 		const nickname = response.nickname;
-		getNicknameVals = function() {
-			return {nickname: nickname};
-		};
+			function getNicknameVals() {
+                return JSON.stringify({ userName: nickname });
+            }
+
+            // Set hx-vals attribute
+            document.getElementById('deployments-list').setAttribute('hx-vals', getNicknameVals());
             	document.getElementById('userName').value = nickname; 
                     fetch(`/v1/repositories?user_id=${nickname}`) // Replace with your API endpoint
                         .then(response => response.json())
