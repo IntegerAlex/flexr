@@ -11,6 +11,6 @@ export async function createTableDeployments(){
 }
 
 
-
+createTableDeployments();
 
 

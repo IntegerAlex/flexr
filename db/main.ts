@@ -19,7 +19,7 @@ class db {
 	console.log('Error connecting to database');
 	console.log(err);
     });
-    createTableDeployments();
+ 
 	
   }
 	
