@@ -42,8 +42,8 @@ export async function getPort(findPort: number) {
     }
 }
 export function createDirectory(userName: string) {
-	if (!fs.existsSync(`/home/${userName}`)) {
-		fs.mkdirSync(`/home/${userName}`);	
+	if (!fs.existsSync(`/home/akshat/${userName}`)) {
+		fs.mkdirSync(`/home/akshat/${userName}`);	
 	}
 	return true;
 }

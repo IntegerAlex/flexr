@@ -42,7 +42,7 @@ export async function createImage(username: string, projectName: string, repoLin
 async function generateDockerFile(username: string, projectName: string, repoLink: string, entryPoint: string, buildCommand: string, runCommand: string): Promise<void> {
     try {
         // Change directory to username folder
-        process.chdir(`/home/${username}`);
+        process.chdir(`/home/akshat/${username}`);
 
         // Clone the repository into the project directory
         await execAsync(`git clone ${repoLink}`);
