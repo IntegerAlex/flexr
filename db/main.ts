@@ -1,7 +1,7 @@
 import pg from 'pg';
-import dotenv from 'dotenv';
-dotenv.config();
-export class db {
+import {createTableDeployments} from './create';
+require('dotenv').config();
+class db {
   private client: pg.Client;
 
   constructor() {
@@ -14,6 +14,7 @@ export class db {
     });
 
     this.client.connect();
+	createTableDeployments();
   }
 	
   dbQuery = async (query: string) => {
