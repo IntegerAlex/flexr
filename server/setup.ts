@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { auth, requiresAuth } from 'express-openid-connect';
 require('dotenv').config();
-
+import {createDirectory} from './utils/containerUtil';
 const app = express();
 app.set('trust proxy', true);
 
