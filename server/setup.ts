@@ -93,7 +93,7 @@ app.get('/callback', (req, res) => {
 // Profile route, protected by authentication
 app.get('/profile', requiresAuth(), (req, res) => {
     console.log('User accessed /profile');
-    res.send(JSON.stringify(req.oidc.user.nickname));
+    res.json({nickname :JSON.stringify(req.oidc.user.nickname)});
 });
 app.get('/v1/repositories', (req, res) => {
 	// get all repositories
