@@ -36,7 +36,6 @@
                 </div>
             </aside>
             <section class="project-setup-container">
-		    <input type="hidden" id="userName" name="userName" value="">
                 <form id="project-setup-form" hx-post="/htmx/" hx-target="#response-container" hx-trigger="submit">
                     <div class="form-group">
                         <label for="repoLink">Select Repository:</label>
@@ -44,6 +43,10 @@
                             <option value="" disabled selected>Loading repositories...</option>
                         </select>
                     </div>
+		    <div class="form-group">	    
+		    <input for="userName" type="hidden" id="userName" name="userName" value="">
+		    </div>
+
                     <div class="form-group">
                         <label for="buildCommand">Build Command:</label>
                         <input type="text" id="buildCommand" name="buildCommand" placeholder="Enter build command">
