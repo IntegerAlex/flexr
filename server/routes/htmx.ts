@@ -49,10 +49,10 @@ router.post("/", async (req, res) => {
 
 router.get("/deployments", async (req, res) => {
     try {
-        fetch("https://flexr.flexhost.tech/v1/profile")
-		.then((response) => {
-		return response.json();
-	}).then(async(data) => {
+        const response = await  fetch("http://localhost:8080/v1/profile")
+	const data = await response.json();
+
+
 
 		const userName = data.nickname;
 
@@ -74,7 +74,7 @@ router.get("/deployments", async (req, res) => {
                 ${deploymentsHTML}
             </div>
         `);
-	})
+	
     } catch (error) {
         console.error('Error fetching deployments:', error);
         res.send("<p>Error fetching deployments</p>");
