@@ -32,9 +32,6 @@
             <aside class="deployments-container">
                 <h2>Deployments</h2>
 <div id="deployments-list"
-     hx-get="/htmx/deployments"
-     hx-vals='getNicknameVals()'>
-    <!-- Deployment items will be dynamically added here -->
 </div>
 
 
@@ -84,46 +81,36 @@
         .then(response => {
             const nickname = response.nickname;
 
-            function getNicknameVals() {
-                return JSON.stringify({ userName: nickname });
-            }
-
-            // Set hx-vals attribute
-            document.getElementById('deployments-list').setAttribute('hx-vals', getNicknameVals());
             document.getElementById('userName').value = nickname;
 
             // Fetch repositories
-            fetch(`/v1/repositories?user_id=${nickname}`) // Replace with your API endpoint
-                .then(response => response.json())
-                .then(data => {
-                    const img = document.querySelector('.profile-image');
-                    img.src = data.avatar_url;
-                    const projectNameSelect = document.getElementById('repoLink');
-                    projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
-                    data.repositories.forEach(repo => {
-                        const option = document.createElement('option');
-                        option.value = repo.url;
-                        option.textContent = repo.name;
-                        projectNameSelect.appendChild(option);
-                    });
+            return fetch(`/v1/repositories?user_id=${nickname}`);
+        })
+        .then(response => response.json())
+        .then(data => {
+            const img = document.querySelector('.profile-image');
+            img.src = data.avatar_url;
+            const projectNameSelect = document.getElementById('repoLink');
+            projectNameSelect.innerHTML = '<option value="" disabled selected>Select a repository</option>';
+            data.repositories.forEach(repo => {
+                const option = document.createElement('option');
+                option.value = repo.url;
+                option.textContent = repo.name;
+                projectNameSelect.appendChild(option);
+            });
 
-                    // Trigger HTMX manually
-                    htmx.ajax('GET', '/htmx/deployments', {
-                        target: '#deployments-list',
-                        vals: getNicknameVals(),
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching repositories:', error);
-                    const projectNameSelect = document.getElementById('repoLink');
-                    projectNameSelect.innerHTML = '<option value="" disabled selected>Error loading repositories</option>';
-                });
+            // Trigger deployment list fetch after everything else is loaded
+            htmx.ajax('GET', '/htmx/deployments', {
+                target: '#deployments-list',
+                values: { userName: document.getElementById('userName').value }
+            });
         })
         .catch(error => {
-            console.error('Error fetching profile:', error);
+            console.error('Error:', error);
+            const projectNameSelect = document.getElementById('repoLink');
+            projectNameSelect.innerHTML = '<option value="" disabled selected>Error loading repositories</option>';
         });
 });
-
         document.getElementById('project-setup-form').addEventListener('htmx:beforeRequest', function() {
             document.getElementById('loading-message').style.display = 'block';
         });
