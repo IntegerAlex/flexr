@@ -2,6 +2,7 @@ import { exec, execSync } from 'child_process';
 import { promisify } from 'util';
 import { createWriteStream, writeFileSync } from 'fs';
 import { getPort, dockerFile } from './utils/containerUtil';
+import { nginxFn } from '../server/utils/serverUtils';
 import { postDeployment} from '../db/operations';
 const execAsync = promisify(exec);
 
@@ -15,8 +16,10 @@ export async function runContainer(username: string, projectName: string): Promi
         const imageName = `${username.toLowerCase()}-${projectName}`;
         const { stdout } = await execAsync(`podman run -d -p ${port}:8080 -t localhost/${imageName}:latest`);
         createWriteStream('containerId.txt').write(stdout);
-	await postDeployment(username.toLowerCase(), stdout.trim());
-        return stdout.trim();
+	await postDeployment(projectName , username.toLowerCase(), stdout.trim());
+	const link = `https://sites.flexhost.tech/${stdout.trim().substring(0, 12)}`;
+	nginxFn(stdout.trim().substring(0, 12), port);
+        return link;
     } catch (error) {
         console.error(`Error running container: ${error.message}`);
         throw error;

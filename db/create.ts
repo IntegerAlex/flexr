@@ -4,6 +4,7 @@ export async function createTableDeployments() {
     try {
         await database.dbQuery(`
             CREATE TABLE IF NOT EXISTS deployments (
+		    project_name VARCHAR(255) NOT NULL,
                 id SERIAL PRIMARY KEY,
                 container_id VARCHAR(255) NOT NULL,
                 user_name VARCHAR(255) NOT NULL,

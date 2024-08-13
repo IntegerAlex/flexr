@@ -68,7 +68,7 @@ router.get("/deployments", async (req, res) => {
                     <h3>${deployment.projectName}</h3>
                     <p>Status: ${deployment.status}</p>
                     <p>Deployed at: ${new Date(deployment.time).toLocaleString()}</p>
-                    <p>Deployment ID: ${deployment.deployment_id}</p>
+                    <p>Deployment ID: ${deployment.container_id}</p>
                 </div>
             `;
         }).join('');
