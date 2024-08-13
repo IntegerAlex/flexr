@@ -2,7 +2,7 @@ import { exec, execSync } from 'child_process';
 import { promisify } from 'util';
 import { createWriteStream, writeFileSync } from 'fs';
 import { getPort, dockerFile } from './utils/containerUtil';
-import { nginxFn } from '../server/utils/serverUtils';
+import { addNginxLocationBlock } from '../server/utils/serverUtils';
 import { postDeployment} from '../db/operations';
 const execAsync = promisify(exec);
 
@@ -18,7 +18,7 @@ export async function runContainer(username: string, projectName: string): Promi
         createWriteStream('containerId.txt').write(stdout);
 	await postDeployment(projectName , username.toLowerCase(), stdout.trim());
 	const link = `https://sites.flexhost.tech/${stdout.trim().substring(0, 12)}`;
-	nginxFn(stdout.trim().substring(0, 12), port);
+	addNginxLocationBlock(port ,stdout.trim().substring(0, 12) );
         return link;
     } catch (error) {
         console.error(`Error running container: ${error.message}`);

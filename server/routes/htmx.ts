@@ -65,7 +65,7 @@ router.get("/deployments", async (req, res) => {
         const deploymentsHTML = deployments.map(deployment => {
             return `
                 <div class="deployment-item">
-                    <h3>${deployment.projectName}</h3>
+                    <h3>${deployment.project_name}</h3>
                     <p>Status: ${deployment.status}</p>
                     <p>Deployed at: ${new Date(deployment.time).toLocaleString()}</p>
                     <p>Deployment ID: ${deployment.container_id}</p>
