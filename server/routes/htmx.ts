@@ -50,14 +50,14 @@ router.post("/", async (req, res) => {
 router.get("/deployments", async (req, res) => {
     try {
         const userName =  req.query.userName as string;
-	console.log(userName);
+	console.log(userName.toLowerCase());
 	//const data = await response.json();
 	//
 	//
 	//
 	//	const userName = data.nickname;
 
-	const deployments = await getDeployments(userName);
+	const deployments = await getDeployments(userName.toLowerCase());
 	if (!deployments || deployments.length === 0) {
             return res.send("<p>No deployments found</p>");
         }
