@@ -1,18 +1,18 @@
 import database from './main'
 
 
-export async function getDeployments(userName:string){
-	return new Promise((resolve, reject) => {
-	database.dbQuery(`SELECT * FROM deployments where user_name = ${userName}`)
-		.then((res) => {
-			resolve(res)
-		})
-		.catch((err:Error) => {
-			reject(err)
-		})
-	})
-}
+export async function getDeployments(userName: string) {
+    const query = 'SELECT * FROM deployments WHERE user_name = $1';
+    const values = [userName];
 
+    try {
+        const result = await database.dbQuery(query, values);
+        return result;
+    } catch (err) {
+        console.error('Error fetching deployments:', err);
+        throw err;
+    }
+}
 export async function postDeployment(userName: string, containerId: string) {
     const query = `
         INSERT INTO deployments (user_name, container_id,status)
