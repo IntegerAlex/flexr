@@ -7,7 +7,7 @@ export async function getDeployments(userName: string) {
 
     try {
         const result = await database.dbQuery(query, values);
-        return result;
+        return result.rows;
     } catch (err) {
         console.error('Error fetching deployments:', err);
         throw err;
