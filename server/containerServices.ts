@@ -15,7 +15,7 @@ export async function runContainer(username: string, projectName: string): Promi
         const imageName = `${username.toLowerCase()}-${projectName}`;
         const { stdout } = await execAsync(`podman run -d -p ${port}:8080 -t localhost/${imageName}:latest`);
         createWriteStream('containerId.txt').write(stdout);
-	await postDeployment(username, stdout.trim());
+	await postDeployment(username.toLowerCase(), stdout.trim());
         return stdout.trim();
     } catch (error) {
         console.error(`Error running container: ${error.message}`);
