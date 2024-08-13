@@ -107,9 +107,11 @@
                         projectNameSelect.appendChild(option);
                     });
 
-                    // Now that everything is loaded, trigger the hx-get
-                    document.getElementById('deployments-list').setAttribute('hx-trigger', 'load');
-                    htmx.trigger(document.getElementById('deployments-list'), 'load');
+                    // Trigger HTMX manually
+                    htmx.ajax('GET', '/htmx/deployments', {
+                        target: '#deployments-list',
+                        vals: getNicknameVals(),
+                    });
                 })
                 .catch(error => {
                     console.error('Error fetching repositories:', error);
