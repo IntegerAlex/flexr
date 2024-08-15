@@ -85,7 +85,7 @@ router.get("/deployments", async (req, res) => {
     }
 });
 
-router.get("subscription", async (req, res) => {
+router.get("/subscription", async (req, res) => {
 	const userName = req.query.userName as string;
 	try{
 		database.dbRedisGet(userName.toLowerCase())
