@@ -7,6 +7,7 @@ import cors from 'cors';
 import { auth, requiresAuth } from 'express-openid-connect';
 require('dotenv').config();
 import {createDirectory} from './utils/containerUtil';
+import database from '../db/main';
 const app = express();
 app.set('trust proxy', true);
 app.use(cors());
@@ -35,6 +36,7 @@ app.post('/v1/runContainer', async (req, res) => {
         const containerId = await runContainer(userName, projectName);
         
         console.log(`Container running with ID: ${containerId}`);
+	database.dbRedisSet(userName.toLowerCase(), true);
         res.json({ containerId: containerId });
     } catch (err) {
         console.error(`Error: ${err.message}`);

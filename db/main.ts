@@ -53,10 +53,9 @@ class db {
     }
   }
 
-  // Method to set a value in Redis
-  async dbRedisSet(key: string, value: string): Promise<void> {
+ async dbRedisSet(key: string, value: boolean): Promise<void> {
     try {
-      await this.redisClient.set(key, value);
+      await this.redisClient.set(key, value.toString());
       console.log('Redis set reply: OK');
     } catch (error) {
       console.error('Redis set error:', error);
@@ -64,22 +63,22 @@ class db {
     }
   }
 
-async dbRedisGet(key: string): Promise<string | null> {
+  // Method to get a boolean value from Redis
+  async dbRedisGet(key: string): Promise<boolean | null> {
     try {
       const value = await this.redisClient.get(key);
       if (value === null) {
         console.log('Key not found');
         return null;
       }
-      return value;
+      return value === 'true';
     } catch (error) {
       console.error('Redis get error:', error);
       throw error;
     }
-  }	  	
+  }
 }
 
 const database = new db();
 export default database;
-createTableDeployments();
-
+createTableDeployments()

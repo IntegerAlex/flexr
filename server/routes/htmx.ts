@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import {getDeployments} from "../../db/operations";
-import { get } from "http";
+import database from "../../db/main";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -83,6 +83,21 @@ router.get("/deployments", async (req, res) => {
         console.error('Error fetching deployments:', error);
         res.send("<p>Error fetching deployments</p>");
     }
+});
+
+router.get("subscription", async (req, res) => {
+	const userName = req.query.userName as string;
+	database.dbRedisGet(userName.toLowerCase())
+	.then((data) => {
+		if(data){
+			res.send(`<p>You are in free tier</p>
+				 <p>Upgrade to premium to get more deployments</p>`);
+		}
+		else{
+			res.send(`<p>You are in free tier</p>
+				 <p>You can deploy one application</p>`);
+		}
+	})
 });
 
 export default router;
