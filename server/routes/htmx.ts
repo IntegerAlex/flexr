@@ -7,6 +7,14 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { userName , buildCommand , runCommand ,repoLink, entryPoint } = req.body;
   const projectName = repoLink.split("/").pop().split(".")[0];
+  database.dbRedisGet(userName.toLowerCase())
+  .then(async(data) => {
+	  if(data){
+		  res.send(`<p>Deployments limit reached</p>`);
+	  }
+	else{
+
+	
   console.log(projectName, repoLink, entryPoint);
 	//if(!buildCommand){
 	//	buildCommand = 	"npm install"
@@ -40,6 +48,12 @@ router.post("/", async (req, res) => {
 	console.error('Error:',  error);
 	res.send('Error');	
 });
+
+	}})
+	.catch((error) => {
+		console.error('Error:',  error);
+		res.send('Error');
+	});
 
 });
 //db.addContainer(containerId , projectName , repoLink , entryPoint)
