@@ -87,7 +87,8 @@ router.get("/deployments", async (req, res) => {
 
 router.get("subscription", async (req, res) => {
 	const userName = req.query.userName as string;
-	database.dbRedisGet(userName.toLowerCase())
+	try{
+		database.dbRedisGet(userName.toLowerCase())
 	.then((data) => {
 		if(data){
 			res.send(`<p>You are in free tier</p>
@@ -98,6 +99,11 @@ router.get("subscription", async (req, res) => {
 				 <p>You can deploy one application</p>`);
 		}
 	})
+	}
+	catch(error){
+		console.error('Error fetching subscription:', error);
+		res.send("<p>Error fetching subscription</p>");
+	}
 });
 
 export default router;
