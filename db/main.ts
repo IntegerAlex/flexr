@@ -1,11 +1,11 @@
 import pg from 'pg';
-import redis from 'redis';
+import {createClient} from 'redis';
 import { createTableDeployments } from './create';
 require('dotenv').config();
 
 class db {
   private client: pg.Client;
-  private redisClient: redis.RedisClientType;
+  private redisClient;
 
   constructor() {
     // Initialize PostgreSQL client
@@ -25,7 +25,7 @@ class db {
     });
 
     // Initialize Redis client
-    this.redisClient = redis.createClient({
+    this.redisClient = createClient({
       url: 'redis://default:password@localhost:6379',
     });
 
