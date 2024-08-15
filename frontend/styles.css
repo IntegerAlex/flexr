@@ -80,8 +80,7 @@ button {
   background-color: var(--card);
 }
 
-.navbar-left,
-.navbar-right {
+.navbar-left {
   display: flex;
   align-items: center;
 }
@@ -90,14 +89,10 @@ button {
   margin-right: 1rem; /* Adds space between the profile image and any adjacent elements */
 }
 
-.navbar-right form {
-  margin-left: 1rem; /* Adds space between the logout button and any adjacent elements */
-}
-
-.navbar-right .subscription {
-  margin-left: auto;
+.navbar-right {
   display: flex;
   align-items: center;
+  margin-left: auto; /* Pushes the navbar-right section to the far right */
 }
 
 .profile-image {
