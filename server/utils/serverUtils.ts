@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import path from 'path';
 import { exec } from 'child_process';
+
 const NGINX_CONF_PATH = '/etc/nginx/sites-available/sites';
 export async function addNginxLocationBlock(
   port: number,
@@ -76,3 +76,4 @@ export async function addNginxLocationBlock(
     throw error; // Rethrow the error for the caller to handle
   }
 }
+
