@@ -1,5 +1,5 @@
 import pg from 'pg';
-import {createClient} from 'redis';
+import { createClient } from 'redis';
 import { createTableDeployments } from './create';
 require('dotenv').config();
 
@@ -18,11 +18,14 @@ class db {
     });
 
     // Connect to PostgreSQL
-    this.client.connect().then(() => {
-      console.log('Connected to PostgreSQL database');
-    }).catch((err) => {
-      console.error('Error connecting to PostgreSQL database:', err);
-    });
+    this.client
+      .connect()
+      .then(() => {
+        console.log('Connected to PostgreSQL database');
+      })
+      .catch((err) => {
+        console.error('Error connecting to PostgreSQL database:', err);
+      });
 
     // Initialize Redis client
     this.redisClient = createClient({
@@ -35,11 +38,14 @@ class db {
     });
 
     // Connect to Redis
-    this.redisClient.connect().then(() => {
-      console.log('Connected to Redis');
-    }).catch((err) => {
-      console.error('Error connecting to Redis:', err);
-    });
+    this.redisClient
+      .connect()
+      .then(() => {
+        console.log('Connected to Redis');
+      })
+      .catch((err) => {
+        console.error('Error connecting to Redis:', err);
+      });
   }
 
   // Method to execute a PostgreSQL query
@@ -53,7 +59,7 @@ class db {
     }
   }
 
- async dbRedisSet(key: string, value: boolean): Promise<void> {
+  async dbRedisSet(key: string, value: boolean): Promise<void> {
     try {
       await this.redisClient.set(key, value.toString());
       console.log('Redis set reply: OK');
@@ -81,4 +87,4 @@ class db {
 
 const database = new db();
 export default database;
-createTableDeployments()
+createTableDeployments();

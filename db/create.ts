@@ -1,8 +1,8 @@
 import database from './main';
 
 export async function createTableDeployments() {
-    try {
-        await database.dbQuery(`
+  try {
+    await database.dbQuery(`
             CREATE TABLE IF NOT EXISTS deployments (
 		    project_name VARCHAR(255) NOT NULL,
                 id SERIAL PRIMARY KEY,
@@ -12,9 +12,8 @@ export async function createTableDeployments() {
                 status VARCHAR(255) NOT NULL
             );
         `);
-        console.log("Table 'deployments' created or already exists.");
-    } catch (error) {
-        console.error('Error creating table:', error);
-    }
+    console.log("Table 'deployments' created or already exists.");
+  } catch (error) {
+    console.error('Error creating table:', error);
+  }
 }
-
