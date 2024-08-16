@@ -2,37 +2,34 @@ name: Restyled
 
 on:
   push:
-    paths:
-      - '**/*.js'
-      - '**/*.ts'
-  pull_request:
-    paths:
-      - '**/*.js'
-      - '**/*.ts'
 
 jobs:
   restyled:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the current branch's code
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.sha }}
 
+      # Install Restyled CLI
       - name: Install Restyled CLI
         uses: restyled-io/actions/setup@v3
 
+      # Run Restyled to restyle the entire repository
       - name: Run Restyled
         id: restyler
         uses: restyled-io/actions/run@v3
         with:
           fail-on-differences: true
 
-      - name: Create Pull Request for Style Fixes
+      # Create a pull request with the style changes if needed
+      - name: Create Pull Request with Restyled Changes
         if: ${{ !cancelled() && steps.restyler.outputs.success == 'true' }}
         uses: peter-evans/create-pull-request@v6
         with:
-          base: ${{ steps.restyler.outputs.restyled-base }}
-          branch: ${{ steps.restyler.outputs.restyled-head }}
-          title: ${{ steps.restyler.outputs.restyled-title }}
-          body: ${{ steps.restyler.outputs.restyled-body }}
+          commit-message: "Restyled Code"
+          branch: "restyled-branch"
+          title: "Restyled Code"
+          body: "This pull request contains automatic restyling of the code."
+          base: ${{ github.ref }}
+          author: "restyled-io <bot@restyled.io>"
