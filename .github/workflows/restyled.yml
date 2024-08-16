@@ -2,7 +2,7 @@ name: Restyled
 
 on:
   push:
-
+   branches: ["master"]
 jobs:
   restyled:
     runs-on: ubuntu-latest
