@@ -76,4 +76,3 @@ export async function addNginxLocationBlock(
     throw error; // Rethrow the error for the caller to handle
   }
 }
-
