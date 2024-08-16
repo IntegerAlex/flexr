@@ -1,5 +1,5 @@
 :root {
-  --background: #F0F4F8;
+		  --background: #F0F4F8;
   --foreground: #222831;
   --primary: #00A8CC;
   --primary-foreground: #FFFFFF;
@@ -21,6 +21,8 @@
   --radius: 0.75rem;
   --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+
 }
 
 * {
