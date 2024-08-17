@@ -10,10 +10,10 @@ class db {
   constructor() {
     // Initialize PostgreSQL client
     this.client = new pg.Client({
-      user: 'user', // Replace with your local username
-      host: 'localhost',
-      database: 'test',
-      password: 'password', // Replace with your local password
+      user: process.env.PG_USER, // Replace with your local username
+      host: process.env.PG_HOST, // Replace with your local host
+      database: process.env.PG_DATABASE, // Replace with your local database name
+      password: process.env.PG_PASSWORD, // Replace with your local password
       port: 5432, // Default PostgreSQL port
     });
 
@@ -29,7 +29,7 @@ class db {
 
     // Initialize Redis client
     this.redisClient = createClient({
-      url: 'redis://default:password@localhost:6379',
+      url: process.env.REDIS_URL,
     });
 
     // Handle Redis connection errors
