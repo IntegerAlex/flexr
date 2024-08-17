@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { exec } from 'child_process';
 
-const NGINX_CONF_PATH = '/etc/nginx/sites-available/sites';
+const NGINX_CONF_PATH = '/etc/nginx/sites-available/nodeapp';
 export async function addNginxLocationBlock(
   port: number,
   locationPath: string
