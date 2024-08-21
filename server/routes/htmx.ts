@@ -11,9 +11,9 @@ router.post('/', async (req, res) => {
     .dbRedisGet(userName.toLowerCase())
     .then(async (data) => {
       //if (data) {
-        //res.send(`<p>Deployments limit reached</p>`);
-     // } else {
-	if(1==1){
+      //res.send(`<p>Deployments limit reached</p>`);
+      // } else {
+      if (1 == 1) {
         console.log(projectName, repoLink, entryPoint);
         //if(!buildCommand){
         //	buildCommand = 	"npm install"
