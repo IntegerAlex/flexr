@@ -25,7 +25,7 @@ async function addRecord(subdomain: string, dnsRecordId: string) {
                 'X-Auth-Email': process.env.CLOUDFLARE_EMAIL || '', 
                 'X-Auth-Key': process.env.CLOUDFLARE_GLOBAL_TOKEN || '', // Replace with your Cloudflare API key
             },
-            body: JSON.stringify(dnsRecordId),
+            body: JSON.stringify(data),
         });
 
         const result = await response.json();
