@@ -94,11 +94,27 @@ function restartApache() {
     });
 }
 
+function ApacheVHostSymLink(subdomain: string) {
+	exec(`sudo ln -s /etc/apache2/sites-available/${subdomain}.conf /etc/apache2/sites-enabled/${subdomain}.conf`, (error, stdout, stderr) => {
+		if (error) {
+			console.error(`exec error: ${error}`);
+			return;
+		}
+		console.log(`stdout: ${stdout}`);
+		console.error(`stderr: ${stderr}`);
+	
+}
+	    )
+};
+
 // Combine functions to setup DNS, SSL, and Apache VHost
 export async function setupSubdomain(subdomain: string, port: number , dnsRecordID: string) {
     await addRecord(subdomain , dnsRecordID);  // Add DNS record
-    getSSL(subdomain);           // Get SSL certificate
-    ApacheVHost(subdomain, port); // Create Apache VHost
+    ApacheVHost(subdomain, port);// Create Apache VHost
+    ApacheVHostSymLink(subdomain);// Create a symbolic link to enable the VHost
+    restartApache(); // Restart Apache to apply changes
+    setTimeout(() =>
+    getSSL(subdomain),300);// Get SSL certificate
     restartApache(); // Restart Apache to apply changes
     console.log('Subdomain setup completed!');
 }
