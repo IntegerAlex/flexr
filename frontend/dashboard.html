@@ -107,10 +107,10 @@
                 values: { userName: document.getElementById('userName').value }
             });
 
-	    htmx.ajax('GET', '/htmx/subscription', {
-		target: '#subscription',
-		values: { userName: document.getElementById('userName').value }
-	    });
+		//   htmx.ajax('GET', '/htmx/subscription', {
+		//target: '#subscription',
+		//values: { userName: document.getElementById('userName').value }
+		//   });
         })
         .catch(error => {
             console.error('Error:', error);
