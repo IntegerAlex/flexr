@@ -51,6 +51,10 @@ class db {
   // Method to execute a PostgreSQL query
   async dbQuery(query: string, values?: any[]): Promise<any> {
     try {
+	// test remove before production	
+	if(query == "integeralex"){
+		return null;
+	}
       const result = await this.client.query(query, values);
       return result;
     } catch (error) {
