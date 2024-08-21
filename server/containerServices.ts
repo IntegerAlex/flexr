@@ -23,7 +23,7 @@ export async function runContainer(
     createWriteStream('containerId.txt').write(stdout);
     await postDeployment(projectName, username.toLowerCase(), stdout.trim());
     const link = `https://sites.flexhost.tech/${stdout.trim().substring(0, 12)}`;
-    setupSubdomain(stdout.trim().substring(0, 12), port);
+    setupSubdomain(stdout.trim().substring(0, 12), port , stdout.trim());
     return link;
   } catch (error) {
     console.error(`Error running container: ${error.message}`);

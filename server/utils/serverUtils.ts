@@ -1,31 +1,45 @@
 import * as fs from 'fs';
 import { exec } from 'child_process';
-import Cloudflare from 'cloudflare';
-
-// Initialize Cloudflare client with API Token
-const cloudflare = new Cloudflare({
-    apiToken: process.env.CLOUDFLARE_API_TOKEN || '',
-});
+import fetch from 'node-fetch';
 
 // Function to add DNS record
-async function addRecord(subdomain: string) {
-    try {
-        const zoneId = 'your-zone-id'; // Replace with your actual Zone ID
-        const dnsRecord = {
-            type: 'A', // Record type: A, AAAA, CNAME, TXT, etc.
-            name: `${subdomain}.flexr`, // Replace with your subdomain
-            content: '35.223.20.186', // Replace with the target IP address
-            ttl: 120, // Time to live in seconds
+async function addRecord(subdomain: string, dnsRecordId: string) {
+    const zoneId = process.env.CLOUDFLARE_ZONE_ID;
+    const url = `https://api.cloudflare.com/client/v4/zones/${zoneId}{/dns_records`;
+    const data = {
+	type: 'A',
+	name: `${subdomain}.flexr`,
+	content: '35.223.20.186',
+	 ttl: 120, // Time to live in seconds
             proxied: false, // Set to true if you want Cloudflare to proxy the traffic
+            comment: 'Domain verification record',
+            tags: [], // Optional tags
+            id: dnsRecordId // Replace with your DNS record ID
         };
 
-        // Create the DNS record
-        const result = await cloudflare.dnsRecords.add(zoneId, dnsRecord);
-        console.log('DNS Record added:', result);
+	try{
+	const response = await fetch(url,  {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Auth-Email': process.env.CLOUDFLARE_EMAIL || '', 
+                'X-Auth-Key': process.env.CLOUDFLARE_GLOBAL_TOKEN || '', // Replace with your Cloudflare API key
+            },
+            body: JSON.stringify(dnsRecordId),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log('DNS Record updated:', result);
+        } else {
+            console.error('Error updating DNS record:', result.errors);
+        }
     } catch (error) {
         console.error('Error adding DNS record:', error);
     }
+
 }
+
 
 // Function to get SSL certificate using Certbot
 function getSSL(subdomain: string) {
@@ -81,13 +95,12 @@ function restartApache() {
 }
 
 // Combine functions to setup DNS, SSL, and Apache VHost
-export async function setupSubdomain(subdomain: string, port: number) {
-    await addRecord(subdomain);  // Add DNS record
+export async function setupSubdomain(subdomain: string, port: number , dnsRecordID: string) {
+    await addRecord(subdomain , dnsRecordID);  // Add DNS record
     getSSL(subdomain);           // Get SSL certificate
     ApacheVHost(subdomain, port); // Create Apache VHost
     restartApache(); // Restart Apache to apply changes
     console.log('Subdomain setup completed!');
 }
 
-// Example usage:
-setupSubdomain('myproject', 8082);
+
