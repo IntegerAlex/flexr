@@ -58,8 +58,6 @@ function ApacheVHost(subdomain: string, port: number) {
     ServerName ${subdomain}.flexr.flexhost.tech
 
     SSLEngine on
-    SSLCertificateFile /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/privkey.pem
 
     ProxyPass / http://localhost:${port}/
     ProxyPassReverse / http://localhost:${port}/
