@@ -40,16 +40,14 @@ async function addRecord(subdomain: string, dnsRecordId: string) {
 }
 
 // Function to get SSL certificate using Certbot
-function getSSL(subdomain: string, callback: Function) {
+function getSSL(subdomain: string) {
     exec(`sudo certbot --apache -d ${subdomain}.flexr.flexhost.tech`, (error, stdout, stderr) => {
         if (error) {
             console.error(`Certbot error: ${error}`);
-            callback(false);
             return;
         }
         console.log(`Certbot stdout: ${stdout}`);
         console.error(`Certbot stderr: ${stderr}`);
-        callback(true);
     });
 }
 
@@ -85,7 +83,7 @@ function ApacheVHostSymLink(subdomain: string) {
 }
 
 // Function to restart Apache
-function restartApache() {
+export function restartApache() {
     exec('sudo systemctl reload apache2', (error, stdout, stderr) => {
         if (error) {
             console.error(`Apache reload error: ${error}`);
@@ -102,13 +100,7 @@ export async function setupSubdomain(subdomain: string, port: number, dnsRecordI
     ApacheVHost(subdomain, port); // Create Apache VHost
 
     // Obtain SSL and reload Apache only after the certificate has been successfully obtained
-    getSSL(subdomain, (success: boolean) => {
-        if (success) {
-            restartApache(); // Reload Apache to apply SSL
-            console.log('Subdomain setup completed!');
-        } else {
-            console.error('Subdomain setup failed due to SSL issue.');
-        }
-    });
+    getSSL(subdomain)
+    return true;
 }
 
