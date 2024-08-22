@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 // Function to add DNS record
 async function addRecord(subdomain: string, dnsRecordId: string) {
     const zoneId = process.env.CLOUDFLARE_ZONE_ID;
-    const url = `https://api.cloudflare.com/client/v4/zones/${zoneId}{/dns_records`;
+    const url = `https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records`;
     const data = {
 	type: 'A',
 	name: `${subdomain}.flexr`,
@@ -118,6 +118,7 @@ export async function setupSubdomain(subdomain: string, port: number , dnsRecord
     getSSL(subdomain),300);// Get SSL certificate
     restartApache(); // Restart Apache to apply changes
     console.log('Subdomain setup completed!');
+    return true;
 }
 
 
