@@ -38,10 +38,10 @@ async function addRecord(subdomain: string, dnsRecordId: string): Promise<string
     }
 }
 
-// Function to get SSL certificate using Certbot
+// Function to get SSL certificate using Certbot (updated to use standalone mode)
 function getSSL(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec(`sudo certbot --apache -d ${subdomain}.flexr.flexhost.tech`, (error, stdout, stderr) => {
+        exec(`sudo certbot certonly --standalone -d ${subdomain}.flexr.flexhost.tech`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Certbot error: ${error}`);
                 reject("Error obtaining SSL certificate");
@@ -62,6 +62,8 @@ function ApacheVHost(subdomain: string, port: number): Promise<string> {
     ServerName ${subdomain}.flexr.flexhost.tech
 
     SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/privkey.pem
 
     ProxyPass / http://localhost:${port}/
     ProxyPassReverse / http://localhost:${port}/
@@ -115,9 +117,9 @@ export function restartApache(): Promise<string> {
 export async function setupSubdomain(subdomain: string, port: number, dnsRecordID: string): Promise<string> {
     try {
         await addRecord(subdomain, dnsRecordID);
-        await ApacheVHost(subdomain, port);
+        await getSSL(subdomain); // Obtain SSL certificate first
+        await ApacheVHost(subdomain, port); // Configure Apache after certificate is obtained
         await ApacheVHostSymLink(subdomain);
-        await getSSL(subdomain);
         await restartApache();
         return "Subdomain setup completed";
     } catch (error) {
