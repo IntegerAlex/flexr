@@ -7,23 +7,23 @@ async function addRecord(subdomain: string, dnsRecordId: string) {
     const zoneId = process.env.CLOUDFLARE_ZONE_ID;
     const url = `https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records`;
     const data = {
-	type: 'A',
-	name: `${subdomain}.flexr`,
-	content: '35.223.20.186',
-	 ttl: 120, // Time to live in seconds
-            proxied: false, // Set to true if you want Cloudflare to proxy the traffic
-            comment: 'Domain verification record',
-            tags: [], // Optional tags
-            id: dnsRecordId // Replace with your DNS record ID
-        };
+        type: 'A',
+        name: `${subdomain}.flexr`,
+        content: '35.223.20.186',
+        ttl: 120,
+        proxied: false,
+        comment: 'Domain verification record',
+        tags: [],
+        id: dnsRecordId
+    };
 
-	try{
-	const response = await fetch(url,  {
+    try {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Auth-Email': process.env.CLOUDFLARE_EMAIL || '', 
-                'X-Auth-Key': process.env.CLOUDFLARE_GLOBAL_TOKEN || '', // Replace with your Cloudflare API key
+                'X-Auth-Email': process.env.CLOUDFLARE_EMAIL || '',
+                'X-Auth-Key': process.env.CLOUDFLARE_GLOBAL_TOKEN || '',
             },
             body: JSON.stringify(data),
         });
@@ -37,20 +37,19 @@ async function addRecord(subdomain: string, dnsRecordId: string) {
     } catch (error) {
         console.error('Error adding DNS record:', error);
     }
-
 }
 
-
 // Function to get SSL certificate using Certbot
-function getSSL(subdomain: string) {
+function getSSL(subdomain: string, callback: Function) {
     exec(`sudo certbot --apache -d ${subdomain}.flexr.flexhost.tech`, (error, stdout, stderr) => {
         if (error) {
-            console.error(`exec error: ${error}`);
-            return false;
+            console.error(`Certbot error: ${error}`);
+            callback(false);
+            return;
         }
-        console.log(`stdout: ${stdout}`);
-        console.error(`stderr: ${stderr}`);
-        return true;
+        console.log(`Certbot stdout: ${stdout}`);
+        console.error(`Certbot stderr: ${stderr}`);
+        callback(true);
     });
 }
 
@@ -74,53 +73,42 @@ function ApacheVHost(subdomain: string, port: number) {
     ApacheVHostSymLink(subdomain);
 }
 
-// Function to restart Apache
-function restartApache() {
-    exec('sudo apache2ctl configtest', (error, stdout, stderr) => {
+function ApacheVHostSymLink(subdomain: string) {
+    exec(`sudo ln -s /etc/apache2/sites-available/${subdomain}.conf /etc/apache2/sites-enabled/${subdomain}.conf`, (error, stdout, stderr) => {
         if (error) {
-            console.error(`exec error: ${error}`);
+            console.error(`Symlink error: ${error}`);
             return;
         }
-        console.log(`Config test stdout: ${stdout}`);
-        console.error(`Config test stderr: ${stderr}`);
-
-        exec('sudo systemctl reload apache2', (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                return;
-            }
-            console.log(`Apache reload stdout: ${stdout}`);
-            console.error(`Apache reload stderr: ${stderr}`);
-        });
+        console.log(`Symlink stdout: ${stdout}`);
+        console.error(`Symlink stderr: ${stderr}`);
     });
 }
 
-function ApacheVHostSymLink(subdomain: string) {
-	exec(`sudo ln -s /etc/apache2/sites-available/${subdomain}.conf /etc/apache2/sites-enabled/${subdomain}.conf`, (error, stdout, stderr) => {
-		if (error) {
-			console.error(`exec error: ${error}`);
-			return;
-		}
-		console.log(`stdout: ${stdout}`);
-		console.error(`stderr: ${stderr}`);
-	
+// Function to restart Apache
+function restartApache() {
+    exec('sudo systemctl reload apache2', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Apache reload error: ${error}`);
+            return;
+        }
+        console.log(`Apache reload stdout: ${stdout}`);
+        console.error(`Apache reload stderr: ${stderr}`);
+    });
 }
-	    )
-};
 
 // Combine functions to setup DNS, SSL, and Apache VHost
-export async function setupSubdomain(subdomain: string, port: number , dnsRecordID: string) {
-    await addRecord(subdomain , dnsRecordID);  // Add DNS record
-    ApacheVHost(subdomain, port);// Create Apache VHost
-    //ApacheVHostSymLink(subdomain);// Create a symbolic link to enable the VHost
-    restartApache(); // Restart Apache to apply changes
-    setTimeout(() =>
-    getSSL(subdomain),300);// Get SSL certificate
-    restartApache(); // Restart Apache to apply changes
-    console.log('Subdomain setup completed!');
-    return true;
+export async function setupSubdomain(subdomain: string, port: number, dnsRecordID: string) {
+    await addRecord(subdomain, dnsRecordID); // Add DNS record
+    ApacheVHost(subdomain, port); // Create Apache VHost
+
+    // Obtain SSL and reload Apache only after the certificate has been successfully obtained
+    getSSL(subdomain, (success: boolean) => {
+        if (success) {
+            restartApache(); // Reload Apache to apply SSL
+            console.log('Subdomain setup completed!');
+        } else {
+            console.error('Subdomain setup failed due to SSL issue.');
+        }
+    });
 }
-
-
-
 
