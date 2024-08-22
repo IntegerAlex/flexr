@@ -71,6 +71,7 @@ function ApacheVHost(subdomain: string, port: number) {
     `;
 
     fs.writeFileSync(`/etc/apache2/sites-available/${subdomain}.conf`, vhostConfig, { encoding: 'utf8' });
+    ApacheVHostSymLink(subdomain);
 }
 
 // Function to restart Apache
@@ -111,7 +112,7 @@ function ApacheVHostSymLink(subdomain: string) {
 export async function setupSubdomain(subdomain: string, port: number , dnsRecordID: string) {
     await addRecord(subdomain , dnsRecordID);  // Add DNS record
     ApacheVHost(subdomain, port);// Create Apache VHost
-    ApacheVHostSymLink(subdomain);// Create a symbolic link to enable the VHost
+    //ApacheVHostSymLink(subdomain);// Create a symbolic link to enable the VHost
     restartApache(); // Restart Apache to apply changes
     setTimeout(() =>
     getSSL(subdomain),300);// Get SSL certificate
