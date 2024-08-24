@@ -41,9 +41,9 @@ async function addRecord(subdomain: string, dnsRecordId: string): Promise<string
 // Function to get SSL certificate using Certbot (updated to stop and start Apache)
 function getSSL(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec(`sudo systemctl stop apache2 && ` +
+        exec(
              `sudo certbot certonly -d ${subdomain}.flexr.flexhost.tech && ` +
-             `sudo systemctl start apache2`, 
+             `sudo systemctl reload apache2`, 
              (error, stdout, stderr) => {
             if (error) {
                 console.error(`Certbot error: ${error}`);
@@ -65,8 +65,6 @@ function ApacheVHost(subdomain: string, port: number): Promise<string> {
     ServerName ${subdomain}.flexr.flexhost.tech
 
     SSLEngine on
-    SSLCertificateFile /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/privkey.pem
 
     ProxyPass / http://localhost:${port}/
     ProxyPassReverse / http://localhost:${port}/
