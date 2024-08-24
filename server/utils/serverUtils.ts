@@ -42,7 +42,7 @@ async function addRecord(subdomain: string, dnsRecordId: string): Promise<string
 function getSSL(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(`sudo systemctl stop apache2 && ` +
-             `sudo certbot certonly --standalone -d ${subdomain}.flexr.flexhost.tech && ` +
+             `sudo certbot certonly -d ${subdomain}.flexr.flexhost.tech && ` +
              `sudo systemctl start apache2`, 
              (error, stdout, stderr) => {
             if (error) {
