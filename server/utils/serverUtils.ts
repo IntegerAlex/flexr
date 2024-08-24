@@ -38,10 +38,13 @@ async function addRecord(subdomain: string, dnsRecordId: string): Promise<string
     }
 }
 
-// Function to get SSL certificate using Certbot (updated to use standalone mode)
+// Function to get SSL certificate using Certbot (updated to stop and start Apache)
 function getSSL(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec(`sudo certbot certonly --standalone -d ${subdomain}.flexr.flexhost.tech`, (error, stdout, stderr) => {
+        exec(`sudo systemctl stop apache2 && ` +
+             `sudo certbot certonly --standalone -d ${subdomain}.flexr.flexhost.tech && ` +
+             `sudo systemctl start apache2`, 
+             (error, stdout, stderr) => {
             if (error) {
                 console.error(`Certbot error: ${error}`);
                 reject("Error obtaining SSL certificate");
@@ -113,10 +116,22 @@ export function restartApache(): Promise<string> {
     });
 }
 
+// Function to wait for DNS propagation
+function waitForDNSPropagation(subdomain: string): Promise<void> {
+    return new Promise((resolve) => {
+        console.log("Waiting for DNS propagation...");
+        setTimeout(() => {
+            console.log("DNS propagation wait complete.");
+            resolve();
+        }, 60000); // Wait for 60 seconds
+    });
+}
+
 // Combine functions to setup DNS, SSL, and Apache VHost
 export async function setupSubdomain(subdomain: string, port: number, dnsRecordID: string): Promise<string> {
     try {
         await addRecord(subdomain, dnsRecordID);
+        await waitForDNSPropagation(subdomain);
         await getSSL(subdomain); // Obtain SSL certificate first
         await ApacheVHost(subdomain, port); // Configure Apache after certificate is obtained
         await ApacheVHostSymLink(subdomain);
@@ -127,4 +142,3 @@ export async function setupSubdomain(subdomain: string, port: number, dnsRecordI
         throw new Error("Error setting up subdomain");
     }
 }
-
