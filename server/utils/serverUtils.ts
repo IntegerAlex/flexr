@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
+import dns from 'dns';
 
 // Function to add DNS record
 async function addRecord(subdomain: string, dnsRecordId: string): Promise<string> {
@@ -38,22 +39,56 @@ async function addRecord(subdomain: string, dnsRecordId: string): Promise<string
     }
 }
 
+// Function to check if DNS has propagated
+function checkDNSPropagation(subdomain: string): Promise<boolean> {
+    return new Promise((resolve) => {
+        const fullDomain = `${subdomain}.flexr.flexhost.tech`;
+        dns.resolve4(fullDomain, (err, addresses) => {
+            if (err) {
+                console.log(`DNS check failed for ${fullDomain}. Waiting...`);
+                resolve(false);
+            } else if (addresses.includes('35.223.20.186')) { // Replace with your correct IP
+                console.log(`DNS has propagated for ${fullDomain}`);
+                resolve(true);
+            } else {
+                console.log(`DNS returned wrong IP for ${fullDomain}. Waiting...`);
+                resolve(false);
+            }
+        });
+    });
+}
+
+// Function to wait for DNS propagation
+async function waitForDNSPropagation(subdomain: string): Promise<void> {
+    const maxAttempts = 30; // Adjust as needed
+    const delayBetweenChecks = 10000; // 10 seconds
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const isPropagated = await checkDNSPropagation(subdomain);
+        if (isPropagated) {
+            return;
+        }
+        console.log(`Attempt ${attempt}/${maxAttempts}: DNS not yet propagated. Waiting...`);
+        await new Promise((resolve) => setTimeout(resolve, delayBetweenChecks));
+    }
+    throw new Error("DNS propagation timed out");
+}
+
 // Function to get SSL certificate using Certbot (updated to stop and start Apache)
 function getSSL(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(
-             `sudo certbot -d ${subdomain}.flexr.flexhost.tech && ` +
-             `sudo systemctl reload apache2`, 
-             (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Certbot error: ${error}`);
-                reject("Error obtaining SSL certificate");
-                return;
-            }
-            resolve("SSL certificate obtained");
-            console.log(`Certbot stdout: ${stdout}`);
-            console.error(`Certbot stderr: ${stderr}`);
-        });
+            `sudo certbot -d ${subdomain}.flexr.flexhost.tech --non-interactive && ` +
+            `sudo systemctl reload apache2`,
+            (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Certbot error: ${error}`);
+                    reject("Error obtaining SSL certificate");
+                    return;
+                }
+                resolve("SSL certificate obtained");
+                console.log(`Certbot stdout: ${stdout}`);
+                console.error(`Certbot stderr: ${stderr}`);
+            });
     });
 }
 
@@ -114,17 +149,6 @@ export function restartApache(): Promise<string> {
     });
 }
 
-// Function to wait for DNS propagation
-function waitForDNSPropagation(subdomain: string): Promise<void> {
-    return new Promise((resolve) => {
-        console.log("Waiting for DNS propagation...");
-        setTimeout(() => {
-            console.log("DNS propagation wait complete.");
-            resolve();
-        }, 60000); // Wait for 60 seconds
-    });
-}
-
 // Combine functions to setup DNS, SSL, and Apache VHost
 export async function setupSubdomain(subdomain: string, port: number, dnsRecordID: string): Promise<string> {
     try {
@@ -140,3 +164,4 @@ export async function setupSubdomain(subdomain: string, port: number, dnsRecordI
         throw new Error("Error setting up subdomain");
     }
 }
+
