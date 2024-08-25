@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import { exec } from 'child_process';
 import fetch from 'node-fetch';
-import dns from 'dns';
 
 // Function to add DNS record
 function addRecord(subdomain: string, dnsRecordId: string): Promise<string> {
@@ -36,53 +35,6 @@ function addRecord(subdomain: string, dnsRecordId: string): Promise<string> {
     })
     .catch(error => {
         throw new Error("Error adding DNS record: " + error.message);
-    });
-}
-
-// Function to check if DNS has propagated
-function checkDNSPropagation(subdomain: string): Promise<boolean> {
-    return new Promise((resolve) => {
-        const fullDomain = `${subdomain}.flexr.flexhost.tech`;
-        dns.resolve4(fullDomain, (err, addresses) => {
-            if (err) {
-                console.log(`DNS check failed for ${fullDomain}. Waiting...`);
-                resolve(false);
-            } else if (addresses.includes('35.223.20.186')) { // Replace with your correct IP
-                console.log(`DNS has propagated for ${fullDomain}`);
-                resolve(true);
-            } else {
-                console.log(`DNS returned wrong IP for ${fullDomain}. Waiting...`);
-                resolve(false);
-            }
-        });
-    });
-}
-
-// Function to wait for DNS propagation
-function waitForDNSPropagation(subdomain: string): Promise<void> {
-    const maxAttempts = 30; // Adjust as needed
-    const delayBetweenChecks = 10000; // 10 seconds
-    let attempt = 1;
-
-    return new Promise((resolve, reject) => {
-        function check() {
-            checkDNSPropagation(subdomain)
-                .then(isPropagated => {
-                    if (isPropagated) {
-                        resolve();
-                    } else {
-                        if (attempt < maxAttempts) {
-                            attempt++;
-                            console.log(`Attempt ${attempt}/${maxAttempts}: DNS not yet propagated. Waiting...`);
-                            setTimeout(check, delayBetweenChecks);
-                        } else {
-                            reject(new Error("DNS propagation timed out"));
-                        }
-                    }
-                })
-                .catch(err => reject(err));
-        }
-        check();
     });
 }
 
@@ -168,9 +120,6 @@ export function setupSubdomain(subdomain: string, port: number, dnsRecordID: str
     return addRecord(subdomain, dnsRecordID)
         .then(dnsRecordUpdate => {
             console.log(dnsRecordUpdate);
-            return waitForDNSPropagation(subdomain);
-        })
-        .then(() => {
             return getSSL(subdomain);
         })
         .then(sslObtained => {
