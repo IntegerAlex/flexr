@@ -126,26 +126,43 @@ export function setupSubdomain(subdomain: string, port: number, dnsRecordID: str
     return addRecord(subdomain, dnsRecordID)
         .then(dnsRecordUpdate => {
             console.log(dnsRecordUpdate);
-            return getSSL(subdomain);
-        })
-        .then(sslObtained => {
-            console.log(sslObtained);
             return NginxServerBlock(subdomain, port);
+        })
+        .catch(error => {
+            console.error(`Error updating DNS record: ${error}`);
+            throw new Error("Error setting up subdomain");
         })
         .then(serverBlockCreated => {
             console.log(serverBlockCreated);
             return NginxServerBlockSymLink(subdomain);
         })
+        .catch(error => {
+            console.error(`Error creating NGINX server block: ${error}`);
+            throw new Error("Error setting up subdomain");
+        })
         .then(symlinkCreated => {
             console.log(symlinkCreated);
+            return getSSL(subdomain);
+        })
+        .catch(error => {
+            console.error(`Error creating symbolic link: ${error}`);
+            throw new Error("Error setting up subdomain");
+        })
+        .then(sslObtained => {
+            console.log(sslObtained);
             return restartNginx();
+        })
+        .catch(error => {
+            console.error(`Error obtaining SSL certificate: ${error}`);
+            throw new Error("Error setting up subdomain");
         })
         .then(nginxRestarted => {
             console.log(nginxRestarted);
             return "Subdomain setup completed";
         })
         .catch(error => {
-            console.error(`Setup error: ${error}`);
+            console.error(`Error restarting NGINX: ${error}`);
             throw new Error("Error setting up subdomain");
         });
 }
+
