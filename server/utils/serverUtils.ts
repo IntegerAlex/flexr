@@ -42,8 +42,8 @@ function addRecord(subdomain: string, dnsRecordId: string): Promise<string> {
 function getSSL(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(
-            `sudo certbot --apache -d ${subdomain}.flexr.flexhost.tech --non-interactive --agree-tos --email ${process.env.CERTBOT_EMAIL} && ` +
-            `sudo systemctl reload apache2`,
+            `sudo certbot --nginx -d ${subdomain}.flexr.flexhost.tech --non-interactive --agree-tos --email ${process.env.CERTBOT_EMAIL} && ` +
+            `sudo systemctl reload nginx`,
             (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Certbot error: ${error}`);
@@ -57,36 +57,42 @@ function getSSL(subdomain: string): Promise<string> {
     });
 }
 
-// Function to create Apache Virtual Host configuration
-function ApacheVHost(subdomain: string, port: number): Promise<string> {
-    const vhostConfig = `
-<VirtualHost *:443>
-    ServerName ${subdomain}.flexr.flexhost.tech
+// Function to create NGINX server block configuration
+function NginxServerBlock(subdomain: string, port: number): Promise<string> {
+    const serverBlockConfig = `
+server {
+    listen 443 ssl;
+    server_name ${subdomain}.flexr.flexhost.tech;
 
-    SSLEngine on
+    ssl_certificate /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${subdomain}.flexr.flexhost.tech/privkey.pem;
 
-    ProxyPass / http://localhost:${port}/
-    ProxyPassReverse / http://localhost:${port}/
-    ProxyPreserveHost On
-</VirtualHost>
+    location / {
+        proxy_pass http://localhost:${port};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
     `;
 
     return new Promise((resolve, reject) => {
-        fs.writeFile(`/etc/apache2/sites-available/${subdomain}.conf`, vhostConfig, { encoding: 'utf8' }, (error) => {
+        fs.writeFile(`/etc/nginx/sites-available/${subdomain}`, serverBlockConfig, { encoding: 'utf8' }, (error) => {
             if (error) {
                 console.error(`File write error: ${error}`);
-                reject("Error creating Apache VHost configuration");
+                reject("Error creating NGINX server block configuration");
             } else {
-                resolve("Apache VHost configuration created");
+                resolve("NGINX server block configuration created");
             }
         });
     });
 }
 
-// Function to create symbolic link for Apache VHost
-function ApacheVHostSymLink(subdomain: string): Promise<string> {
+// Function to create symbolic link for NGINX server block
+function NginxServerBlockSymLink(subdomain: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec(`sudo ln -s /etc/apache2/sites-available/${subdomain}.conf /etc/apache2/sites-enabled/`, (error, stdout, stderr) => {
+        exec(`sudo ln -s /etc/nginx/sites-available/${subdomain} /etc/nginx/sites-enabled/`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Symlink error: ${error}`);
                 reject("Error creating symbolic link");
@@ -99,23 +105,23 @@ function ApacheVHostSymLink(subdomain: string): Promise<string> {
     });
 }
 
-// Function to restart Apache
-function restartApache(): Promise<string> {
+// Function to restart NGINX
+function restartNginx(): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec('sudo systemctl reload apache2', (error, stdout, stderr) => {
+        exec('sudo systemctl reload nginx', (error, stdout, stderr) => {
             if (error) {
-                console.error(`Apache reload error: ${error}`);
-                reject("Error restarting Apache");
+                console.error(`NGINX reload error: ${error}`);
+                reject("Error restarting NGINX");
             } else {
-                resolve("Apache restarted");
-                console.log(`Apache reload stdout: ${stdout}`);
-                console.error(`Apache reload stderr: ${stderr}`);
+                resolve("NGINX restarted");
+                console.log(`NGINX reload stdout: ${stdout}`);
+                console.error(`NGINX reload stderr: ${stderr}`);
             }
         });
     });
 }
 
-// Combine functions to setup DNS, SSL, and Apache VHost
+// Combine functions to setup DNS, SSL, and NGINX server block
 export function setupSubdomain(subdomain: string, port: number, dnsRecordID: string): Promise<string> {
     return addRecord(subdomain, dnsRecordID)
         .then(dnsRecordUpdate => {
@@ -124,18 +130,18 @@ export function setupSubdomain(subdomain: string, port: number, dnsRecordID: str
         })
         .then(sslObtained => {
             console.log(sslObtained);
-            return ApacheVHost(subdomain, port);
+            return NginxServerBlock(subdomain, port);
         })
-        .then(vhostCreated => {
-            console.log(vhostCreated);
-            return ApacheVHostSymLink(subdomain);
+        .then(serverBlockCreated => {
+            console.log(serverBlockCreated);
+            return NginxServerBlockSymLink(subdomain);
         })
         .then(symlinkCreated => {
             console.log(symlinkCreated);
-            return restartApache();
+            return restartNginx();
         })
-        .then(apacheRestarted => {
-            console.log(apacheRestarted);
+        .then(nginxRestarted => {
+            console.log(nginxRestarted);
             return "Subdomain setup completed";
         })
         .catch(error => {
@@ -143,4 +149,3 @@ export function setupSubdomain(subdomain: string, port: number, dnsRecordID: str
             throw new Error("Error setting up subdomain");
         });
 }
-
